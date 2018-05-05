@@ -8,9 +8,11 @@ export enum BenchmarkStatus {
     Success
 }
 
-export default class BenchmarkResult {
+export class BenchmarkResult {
     type: BenchmarkType;
-    status: BenchmarkStatus
+    status: BenchmarkStatus;
+    stdout: string;
+    state: any
 }
 
 export interface Benchmark {

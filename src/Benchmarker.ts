@@ -9,6 +9,7 @@ export default class Benchmarker {
         this._provider = provider;
         this._benchmarks = benchmarks;
     }
+
     async start() {
         const server = await this._provider.createServer();
         try {
