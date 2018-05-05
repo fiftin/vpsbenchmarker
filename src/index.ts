@@ -1,11 +1,18 @@
-import app from './App'
+import ProviderFactory from "./ProviderFactory";
+import Benchmarker from "./Benchmarker";
+const argv = require('yargs').argv;
 
-const port = process.env.PORT || 3000
+const factory = new ProviderFactory();
 
-app.listen(port, (err) => {
-  if (err) {
-    return console.log(err)
-  }
+const provider = factory.createProvider(argv.provider);
 
-  return console.log(`server is listening on ${port}`)
-})
+const benchmarks = [];
+
+const benchmarker = new Benchmarker(provider, benchmarks);
+
+benchmarker.start().then(result => {
+
+}, err => {
+    ;
+});
+
