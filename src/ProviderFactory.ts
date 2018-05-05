@@ -12,7 +12,7 @@ export default class ProviderFactory {
 
     createProvider(name: string, options = {}): Provider {
         const creator = this._providerCreators[name];
-        if (creator === null) {
+        if (creator == null) {
             throw new Error(`Provider ${name} does not exists`);
         }
         return creator(options);
