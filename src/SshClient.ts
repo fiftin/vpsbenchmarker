@@ -39,18 +39,35 @@ export class SshClient implements IClient {
 
     public runCommand(command: string): Promise<string> {
         return new Promise((resolve, reject) => {
+            let stdout = "";
+            let stderr = "";
             this.conn.exec(command, (err, stream) => {
                 if (err) {
                     reject(err);
                 }
-                stream.on("close", (code, signal) => {
-                    this.conn.end();
-                    reject(new Error(`Connection closed (${code}, ${signal}).`));
-                }).on("data", (data) => {
-                    resolve(data);
-                }).stderr.on("data", (data) => {
-                    resolve(data);
+
+                stream.stderr.on("data", (data) => {
+                    stderr += data.toString();
+                }).on("end", () => {
+                    resolve(stderr);
                 });
+
+                stream.stdout.on("data", (data) => {
+                    stdout += data.toString();
+                }).on("end", () => {
+                    resolve(stdout);
+                });
+
+                // stream.on("close", (code, signal) => {
+                //     this.conn.end();
+                //     reject(new Error(`Connection closed (${code}, ${signal}).`));
+                // }).on("data", (data) => {
+                //     stdout += data.toString();
+                // }).stderr.on("data", (data: Buffer) => {
+                //     stderr += data.toString();
+                // }).on("end", () => {
+                //     resolve(stdout);
+                // });
             });
         });
     }

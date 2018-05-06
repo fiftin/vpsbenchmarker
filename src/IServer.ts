@@ -1,3 +1,3 @@
-interface Server {
+interface IServer {
     connect(): Promise<IClient>;
 }

@@ -1,7 +1,6 @@
 import Benchmarker from "./Benchmarker";
 import ProviderFactory from "./ProviderFactory";
 
-import debug from "debug";
 import {argv} from "yargs";
 import {SshClient} from "./SshClient";
 import CpuBenchmark from "./sysbench/CpuBenchmark";
@@ -24,16 +23,21 @@ const benchmarker = new Benchmarker(provider, benchmarks);
 //    ;
 // });
 
+const logger = console;
+
 const sshClient = new SshClient({
     host: "195.201.91.117",
     privateKey: "C:\\Users\\fifti\\.ssh\\id_rsa",
     username: "root",
 });
 
-sshClient.connect().then(() => {
-    return sshClient.runCommand("tail");
-}).then((result) => {
-    debug(result);
+(async () => {
+    await sshClient.connect();
+    logger.log(await sshClient.runCommand("apt remove sysbench -y"));
+    logger.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+    logger.log(await sshClient.runCommand("apt install sysbench -y"));
+})().then(() => {
+    process.exit();
 }, (err) => {
-    debug(err);
-}).then(() => process.exit());
+    logger.log(err);
+});

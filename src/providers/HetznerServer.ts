@@ -1,10 +1,7 @@
-import {SshClient, SshClientOptions} from "../SshClient";
+import {SshClient} from "../SshClient";
+import SshClientOptions from "../SshClientOptions";
 
-export default class HetznerServer implements Server {
-    constructor() {
-
-    }
-
+export default class HetznerServer implements IServer {
     async connect(): Promise<IClient> {
         const options = new SshClientOptions();
         const client = new SshClient(options);

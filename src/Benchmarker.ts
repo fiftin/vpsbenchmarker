@@ -1,24 +1,24 @@
+import {IBenchmark} from "./IBenchmark";
 import Provider from "./Provider";
-import {Benchmark} from "./Benchmark";
 
 export default class Benchmarker {
-    private readonly _provider: Provider;
-    private readonly _benchmarks: Benchmark[];
+    private readonly provider: Provider;
+    private readonly benchmarks: IBenchmark[];
 
-    constructor(provider: Provider, benchmarks: Benchmark[]) {
-        this._provider = provider;
-        this._benchmarks = benchmarks;
+    constructor(provider: Provider, benchmarks: IBenchmark[]) {
+        this.provider = provider;
+        this.benchmarks = benchmarks;
     }
 
-    async start() {
-        const server = await this._provider.createServer();
+    public async start() {
+        const server = await this.provider.createServer();
         try {
             const client = await server.connect();
-            for (const benchmark of this._benchmarks) {
+            for (const benchmark of this.benchmarks) {
                 const results = await benchmark.run(client);
             }
         } finally {
-            await this._provider.destroyServer(server);
+            await this.provider.destroyServer(server);
         }
     }
 }

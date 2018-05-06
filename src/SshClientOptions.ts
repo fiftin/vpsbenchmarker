@@ -3,4 +3,3 @@ export default class SshClientOptions {
     public username: string;
     public privateKey: string;
 }
-

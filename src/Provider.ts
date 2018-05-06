@@ -1,4 +1,4 @@
 export default abstract class Provider {
-    abstract createServer(): Promise<Server>;
-    abstract destroyServer(server: Server): Promise<void>;
+    public abstract createServer(): Promise<IServer>;
+    public abstract destroyServer(server: IServer): Promise<void>;
 }
