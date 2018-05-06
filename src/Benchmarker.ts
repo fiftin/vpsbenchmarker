@@ -1,16 +1,16 @@
 import {BenchmarkResult, IBenchmark} from "./IBenchmark";
 
-export default class Benchmarker {
-    private readonly provider: IProvider;
+export default class Benchmarker<TServerOptions> {
+    private readonly provider: IProvider<TServerOptions>;
     private readonly benchmarks: IBenchmark[];
 
-    constructor(provider: IProvider, benchmarks: IBenchmark[]) {
+    constructor(provider: IProvider<TServerOptions>, benchmarks: IBenchmark[]) {
         this.provider = provider;
         this.benchmarks = benchmarks;
     }
 
-    public async start(): Promise<BenchmarkResult[]> {
-        const server = await this.provider.createServer();
+    public async start(options: TServerOptions): Promise<BenchmarkResult[]> {
+        const server = await this.provider.createServer(options);
         try {
             const client = await server.connect();
             const ret = [];

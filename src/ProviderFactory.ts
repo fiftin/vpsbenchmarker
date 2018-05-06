@@ -5,11 +5,14 @@ export default class ProviderFactory {
 
     constructor() {
         this.providerCreators.set("hetzner", () => {
-            return new Hetzner();
+            return new Hetzner({
+                apiToken: "",
+                sshKey: "",
+            });
         });
     }
 
-    public createProvider(name: string, options = {}): IProvider {
+    public createProvider<TServerOptions>(name: string, options: TServerOptions): IProvider<TServerOptions> {
         const creator = this.providerCreators.get(name);
         if (creator == null) {
             throw new Error(`Provider ${name} does not exists`);

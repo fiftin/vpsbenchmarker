@@ -1,7 +1,7 @@
 import {readFile} from "fs";
 import {Client as Ssh2Client} from "ssh2";
 
-interface ISshClientOptions {
+export interface ISshClientOptions {
     host: string;
     username: string;
     privateKey: string;
