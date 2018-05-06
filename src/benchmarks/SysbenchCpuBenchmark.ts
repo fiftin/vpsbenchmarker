@@ -1,7 +1,7 @@
 import {BenchmarkResult, BenchmarkStatus, BenchmarkType, IBenchmark} from "../IBenchmark";
-import Parsers from "../parser/Parsers";
+import Parsers from "../parsing/Parsers";
 
-export default class CpuBenchmark implements IBenchmark {
+export default class SysbenchCpuBenchmark implements IBenchmark {
     private options: any;
 
     constructor(options: any) {
@@ -11,7 +11,7 @@ export default class CpuBenchmark implements IBenchmark {
     public async run(client: IClient): Promise<BenchmarkResult> {
         const ret = new BenchmarkResult();
 
-        await client.runCommand("sudo -s");
+        // await client.runCommand("sudo -s");
         await client.runCommand("apt update");
         await client.runCommand("apt install sysbench");
 

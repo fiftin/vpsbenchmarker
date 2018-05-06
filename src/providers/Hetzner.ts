@@ -1,13 +1,11 @@
-import Provider from "../Provider";
 import HetznerServer from "./HetznerServer";
 
-export default class Hetzner extends Provider {
-    async createServer(): Promise<IServer> {
-        await Promise.resolve();
+export default class Hetzner implements IProvider {
+    public async createServer(): Promise<IServer> {
         return new HetznerServer();
     }
 
-    destroyServer(server: IServer): Promise<void> {
+    public destroyServer(server: IServer): Promise<void> {
         return undefined;
     }
 }

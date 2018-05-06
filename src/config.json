@@ -1,7 +1,7 @@
 {
   "benchmarks": {
-    "cpu-sysbench-2-cors": {
-      "type": "cpu-sysbench",
+    "sysbench-cpu-2-cores": {
+      "type": "SysbenchCpuBenchmark",
       "threads": 2
     }
   }

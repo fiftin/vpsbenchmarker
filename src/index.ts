@@ -1,43 +1,33 @@
-import Benchmarker from "./Benchmarker";
-import ProviderFactory from "./ProviderFactory";
-
 import {argv} from "yargs";
-import {SshClient} from "./SshClient";
-import CpuBenchmark from "./sysbench/CpuBenchmark";
+import Benchmarker from "./Benchmarker";
+import SysbenchCpuBenchmark from "./benchmarks/SysbenchCpuBenchmark";
+import ProviderFactory from "./ProviderFactory";
 
 const config = require("./config.json");
 
-const factory = new ProviderFactory();
 
-const provider = factory.createProvider(argv.provider);
+const provider = new ProviderFactory().createProvider(argv.provider);
 
 const benchmarks = argv.benchmarks.split(",").map((key) => {
-    return new CpuBenchmark(config.benchmarks[key]);
+    if (config.benchmarks[key] == null) {
+        throw new Error(`Benchmark with name ${key} does not exists`);
+    }
+    switch (config.benchmarks[key].type) {
+        case "SysbenchCpuBenchmark":
+            return new SysbenchCpuBenchmark(config.benchmarks[key]);
+    }
 });
 
 const benchmarker = new Benchmarker(provider, benchmarks);
 
-// benchmarker.start().then(result => {
-//    ;
-// }, err => {
-//    ;
-// });
-
 const logger = console;
 
-const sshClient = new SshClient({
-    host: "195.201.91.117",
-    privateKey: "C:\\Users\\fifti\\.ssh\\id_rsa",
-    username: "root",
-});
-
 (async () => {
-    await sshClient.connect();
-    logger.log(await sshClient.runCommand("apt remove sysbench -y"));
-    logger.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-    logger.log(await sshClient.runCommand("apt install sysbench -y"));
+    const results = await benchmarker.start();
+    logger.log(results);
 })().then(() => {
     process.exit();
 }, (err) => {
-    logger.log(err);
+    logger.error(err);
+    process.exit();
 });

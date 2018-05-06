@@ -1,12 +1,17 @@
 import {readFile} from "fs";
 import {Client as Ssh2Client} from "ssh2";
-import SshClientOptions from "./SshClientOptions";
+
+interface ISshClientOptions {
+    host: string;
+    username: string;
+    privateKey: string;
+}
 
 export class SshClient implements IClient {
     private conn: Ssh2Client;
-    private options: SshClientOptions;
+    private options: ISshClientOptions;
 
-    constructor(options: SshClientOptions) {
+    constructor(options: ISshClientOptions) {
         this.options = options;
     }
 
@@ -57,17 +62,6 @@ export class SshClient implements IClient {
                 }).on("end", () => {
                     resolve(stdout);
                 });
-
-                // stream.on("close", (code, signal) => {
-                //     this.conn.end();
-                //     reject(new Error(`Connection closed (${code}, ${signal}).`));
-                // }).on("data", (data) => {
-                //     stdout += data.toString();
-                // }).stderr.on("data", (data: Buffer) => {
-                //     stderr += data.toString();
-                // }).on("end", () => {
-                //     resolve(stdout);
-                // });
             });
         });
     }

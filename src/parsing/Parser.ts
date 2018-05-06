@@ -1,10 +1,20 @@
-import {FieldTemplate, FieldType} from "./FieldTemplate";
+export enum FieldType {
+    Int,
+    Float,
+    String,
+}
+
+export interface IFieldTemplate {
+    type: FieldType;
+    regexp: RegExp;
+    indexInRegexp: number;
+}
 
 export default class Parser {
-    private readonly templates: Map<string, FieldTemplate>;
+    private readonly templates: Map<string, IFieldTemplate>;
 
-    constructor(templates: Map<string, FieldTemplate>) {
-        this.templates = new Map<string, FieldTemplate>(templates);
+    constructor(templates: Map<string, IFieldTemplate>) {
+        this.templates = new Map<string, IFieldTemplate>(templates);
     }
 
     public parse(str: string): object {

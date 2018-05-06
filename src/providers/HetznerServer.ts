@@ -1,10 +1,12 @@
 import {SshClient} from "../SshClient";
-import SshClientOptions from "../SshClientOptions";
 
 export default class HetznerServer implements IServer {
-    async connect(): Promise<IClient> {
-        const options = new SshClientOptions();
-        const client = new SshClient(options);
+    public async connect(): Promise<IClient> {
+        const client = new SshClient({
+            host: "195.201.91.117",
+            privateKey: "C:\\Users\\fifti\\.ssh\\id_rsa",
+            username: "root",
+        });
         await client.connect();
         return client;
     }

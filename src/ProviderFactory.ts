@@ -1,4 +1,3 @@
-import Provider from "./Provider";
 import Hetzner from "./providers/Hetzner";
 
 export default class ProviderFactory {
@@ -10,7 +9,7 @@ export default class ProviderFactory {
         });
     }
 
-    public createProvider(name: string, options = {}): Provider {
+    public createProvider(name: string, options = {}): IProvider {
         const creator = this.providerCreators.get(name);
         if (creator == null) {
             throw new Error(`Provider ${name} does not exists`);
