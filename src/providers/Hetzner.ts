@@ -7,11 +7,11 @@ export interface IHetznerSettings {
     sshKey: string;
 }
 
-export interface IHetznerServerOptions {
+export interface IHetznerServerOptions extends IServerOptions {
     image: string;
-    name: string;
     type: string;
     privateKey: string;
+    location: string;
 }
 
 export class Hetzner implements IProvider<IHetznerServerOptions> {
@@ -24,6 +24,7 @@ export class Hetzner implements IProvider<IHetznerServerOptions> {
         const serverInfo = await requestPromise({
             body: {
                 image: options.image,
+                location: options.location,
                 name: options.name,
                 server_type: options.type,
                 ssh_keys: [this.settings.sshKey],
@@ -37,14 +38,46 @@ export class Hetzner implements IProvider<IHetznerServerOptions> {
             uri: "https://api.hetzner.cloud/v1/servers",
         });
 
-        return new HetznerServer(serverInfo, {
+        while (true) {
+            await new Promise((resolve) => setTimeout(resolve, 10000));
+
+            const info = await requestPromise({
+                headers: {
+                    Authorization: `Bearer ${this.settings.apiToken}`,
+                },
+                json: true,
+                method: "GET",
+                uri: `https://api.hetzner.cloud/v1/servers/${serverInfo.server.id}`,
+            });
+            if (info.server.status === "running") {
+                break;
+            }
+        }
+
+        await new Promise((resolve) => setTimeout(resolve, 60000));
+
+        return new HetznerServer(serverInfo.server, {
             host: serverInfo.server.public_net.ipv4.ip,
             privateKey: options.privateKey,
             username: "root",
         });
     }
 
-    public destroyServer(server: IServer): Promise<void> {
-        return undefined;
+    public async destroyServer(server: IServer): Promise<void> {
+        const hetznerServer = server as HetznerServer;
+        const result = await requestPromise({
+            headers: {
+                Authorization: `Bearer ${this.settings.apiToken}`,
+            },
+            json: true,
+            method: "DELETE",
+            uri: `https://api.hetzner.cloud/v1/servers/${hetznerServer.serverInfo.id}`,
+        });
+        const error = result.action.error;
+        if (error) {
+            throw new Error(`Error ${error.code} during deleting ` +
+                `server ${hetznerServer.serverInfo.id}: ${error.message}`);
+        }
+        await new Promise((resolve) => setTimeout(resolve, 5000));
     }
 }

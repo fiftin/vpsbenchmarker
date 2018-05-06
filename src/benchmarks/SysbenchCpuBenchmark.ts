@@ -13,7 +13,7 @@ export default class SysbenchCpuBenchmark implements IBenchmark {
 
         // await client.runCommand("sudo -s");
         await client.runCommand("apt update");
-        await client.runCommand("apt install sysbench");
+        await client.runCommand("apt install sysbench -y");
 
         ret.stdout = await client.runCommand(`sysbench --test=cpu --num-threads=${this.options.threads} run`);
         ret.type = BenchmarkType.Cpu;

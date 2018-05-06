@@ -33,6 +33,7 @@ function getProviderBenchmarks(providerId: string): Map<string, IBenchmark[]> {
                 throw new Error(`Unknown benchmark type ${config.benchmarks[benchmarkId].type}`);
         }
         serverBenchmarks.push(benchmark);
+        return result;
     }, new Map<string, IBenchmark[]>());
 }
 
@@ -46,6 +47,7 @@ const logger = console;
         const benchmarker = new Benchmarker<IHetznerServerOptions>(provider, serverBenchmarks);
         const serverResults = await benchmarker.start({
             image: providerInfo.servers[serverId].image,
+            location: providerInfo.servers[serverId].location,
             name: providerInfo.servers[serverId].name,
             privateKey: providerInfo.settings.privateKey,
             type: providerInfo.servers[serverId].type,

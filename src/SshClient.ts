@@ -1,6 +1,8 @@
 import {readFile} from "fs";
 import {Client as Ssh2Client} from "ssh2";
 
+const logger = console;
+
 export interface ISshClientOptions {
     host: string;
     username: string;
@@ -46,19 +48,24 @@ export class SshClient implements IClient {
         return new Promise((resolve, reject) => {
             let stdout = "";
             let stderr = "";
+            logger.log(`Executing command over SSH: "${command}"...`);
             this.conn.exec(command, (err, stream) => {
                 if (err) {
                     reject(err);
                 }
 
                 stream.stderr.on("data", (data) => {
-                    stderr += data.toString();
+                    const str = data.toString();
+                    logger.log(str);
+                    stderr += str + "\n";
                 }).on("end", () => {
                     resolve(stderr);
                 });
 
                 stream.stdout.on("data", (data) => {
-                    stdout += data.toString();
+                    const str = data.toString();
+                    logger.log(str);
+                    stdout += str + "\n";
                 }).on("end", () => {
                     resolve(stdout);
                 });

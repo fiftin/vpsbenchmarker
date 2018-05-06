@@ -1,7 +1,9 @@
 import {ISshClientOptions, SshClient} from "../SshClient";
 
+const logger = console;
+
 export default class HetznerServer implements IServer {
-    private readonly serverInfo: any;
+    public readonly serverInfo: any;
     private readonly clientOptions: ISshClientOptions;
 
     constructor(serverInfo: any, clientOptions: ISshClientOptions) {
@@ -11,7 +13,15 @@ export default class HetznerServer implements IServer {
 
     public async connect(): Promise<IClient> {
         const client = new SshClient(this.clientOptions);
-        await client.connect();
+        while (true) {
+            try {
+                await client.connect();
+                break;
+            } catch (e) {
+                logger.log(`Error during connection to server ${this.serverInfo.name}: ${e.message}\nTrying again...`);
+                await new Promise((resolve) => setTimeout(resolve, 30000));
+            }
+        }
         return client;
     }
 }

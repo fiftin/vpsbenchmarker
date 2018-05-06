@@ -20,6 +20,7 @@
     "@types/yargs": "^11.0.0",
     "express": "4.15.3",
     "nodemon": "1.11.0",
+    "request": "^2.85.0",
     "request-promise-native": "^1.0.5",
     "ssh2": "latest",
     "yargs": "^11.0.0"
