@@ -1,4 +1,4 @@
-import Hetzner from "./providers/Hetzner";
+import {Hetzner} from "./providers/Hetzner";
 
 export default class ProviderFactory {
     private providerCreators = new Map();

@@ -1,5 +1,6 @@
-import requestPromise from "request-promise-native";
 import HetznerServer from "./HetznerServer";
+
+const requestPromise = require("request-promise-native");
 
 export interface IHetznerSettings {
     apiToken: string;
@@ -13,14 +14,14 @@ export interface IHetznerServerOptions {
     privateKey: string;
 }
 
-export default class Hetzner implements IProvider<IHetznerServerOptions> {
+export class Hetzner implements IProvider<IHetznerServerOptions> {
     private readonly settings: IHetznerSettings;
     constructor(settings: IHetznerSettings) {
         this.settings = settings;
     }
 
     public async createServer(options: IHetznerServerOptions): Promise<IServer> {
-        await requestPromise({
+        const serverInfo = await requestPromise({
             body: {
                 image: options.image,
                 name: options.name,
@@ -36,8 +37,8 @@ export default class Hetzner implements IProvider<IHetznerServerOptions> {
             uri: "https://api.hetzner.cloud/v1/servers",
         });
 
-        return new HetznerServer({
-            host: "",
+        return new HetznerServer(serverInfo, {
+            host: serverInfo.server.public_net.ipv4.ip,
             privateKey: options.privateKey,
             username: "root",
         });
