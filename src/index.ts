@@ -5,7 +5,6 @@ import ProviderFactory from "./ProviderFactory";
 
 const config = require("./config.json");
 
-
 const provider = new ProviderFactory().createProvider(argv.provider);
 
 const benchmarks = argv.benchmarks.split(",").map((key) => {
