@@ -17,7 +17,7 @@ export default class Parser {
         this.templates = new Map<string, IFieldTemplate>(templates);
     }
 
-    public parse(str: string): object {
+    public parse(str: string): any {
         const ret = {};
 
         for (const line of str.split("\n")) {
