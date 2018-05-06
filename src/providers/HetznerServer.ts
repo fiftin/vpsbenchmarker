@@ -5,7 +5,7 @@ export default class HetznerServer implements Server {
 
     }
 
-    async connect(): Promise<Client> {
+    async connect(): Promise<IClient> {
         const options = new SshClientOptions();
         const client = new SshClient(options);
         await client.connect();
