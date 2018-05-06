@@ -11,7 +11,7 @@ export default class CpuBenchmark implements Benchmark {
         return {};
     }
 
-    async run(client: Client): Promise<BenchmarkResult> {
+    async run(client: IClient): Promise<BenchmarkResult> {
         const ret = new BenchmarkResult();
 
         await client.runCommand("sudo -s");

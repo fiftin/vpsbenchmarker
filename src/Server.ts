@@ -1,3 +1,3 @@
 interface Server {
-    connect(): Promise<Client>;
+    connect(): Promise<IClient>;
 }

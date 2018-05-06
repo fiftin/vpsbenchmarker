@@ -16,5 +16,5 @@ export class BenchmarkResult {
 }
 
 export interface Benchmark {
-    run(client: Client): Promise<BenchmarkResult>;
+    run(client: IClient): Promise<BenchmarkResult>;
 }
