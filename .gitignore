@@ -3,3 +3,4 @@ dist
 npm-debug.log
 /.idea
 /src/*.js
+/vpsbenchmarker.iml
