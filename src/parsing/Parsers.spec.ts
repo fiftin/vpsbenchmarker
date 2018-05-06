@@ -2,6 +2,12 @@ import {expect} from "chai";
 import Parsers from "./Parsers";
 
 describe("Parsers", () => {
+    it("Should parse sysbench total time", () => {
+        const res = Parsers.cpuSysbench.parse(
+            "    total time:                          9.6701s\n");
+        expect(res.totalTime).to.eq(9.6701);
+    });
+
     it("Should parse CPU sysbench results", () => {
         const res = Parsers.cpuSysbench.parse(
             "sysbench 0.4.12:  multi-threaded system evaluation benchmark\n" +
@@ -30,6 +36,6 @@ describe("Parsers", () => {
             "Threads fairness:\n" +
             "    events (avg/stddev):           10000.0000/57.00\n" +
             "    execution time (avg/stddev):   9.6680/0.00\n");
-        expect(res.totalTime).to.eq(0.6791);
+        expect(res.totalTime).to.eq(9.6701);
     });
 });

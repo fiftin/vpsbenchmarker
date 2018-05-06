@@ -21,8 +21,7 @@ export default class Parser {
         const ret = {};
 
         for (const line of str.split("\n")) {
-            for (const field of Object.keys(this.templates)) {
-                const template = this.templates[field];
+            for (const [field, template] of this.templates) {
                 const m = line.match(template.regexp);
                 if (!m) {
                     continue;
