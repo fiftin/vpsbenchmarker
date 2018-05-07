@@ -7,7 +7,7 @@ import MdsStorage from "./MdsStorage";
 import ProviderFactory from "./ProviderFactory";
 import {IHetznerServerOptions} from "./providers/Hetzner";
 
-const config = require("./config.json");
+const config = require("../config.json");
 
 const storage: IStorage = new MdsStorage(config.storage);
 

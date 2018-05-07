@@ -1,6 +1,6 @@
 import {Hetzner} from "./providers/Hetzner";
 
-const config = require("./config.json");
+const config = require("../config.json");
 
 export default class ProviderFactory {
     private providerCreators = new Map();

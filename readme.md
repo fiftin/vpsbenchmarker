@@ -21,6 +21,6 @@
 
 ### Configuration
 
-Configuration reads from ```dist/config.json```.
+Configuration reads from ```config.json```.
 
 

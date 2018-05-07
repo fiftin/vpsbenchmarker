@@ -5,3 +5,4 @@ npm-debug.log
 /src/*.js
 /vpsbenchmarker.iml
 /.vscode
+/config.json
