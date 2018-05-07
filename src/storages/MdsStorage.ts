@@ -53,7 +53,7 @@ export default class MdsStorage implements IStorage {
                 root: this.options.root,
             });
 
-            await client.entities.update({
+            await client.entities.change({
                 fields,
                 path: `${this.options.path}/${benchmarkType}/${provider}`,
                 root: this.options.root,
