@@ -13,11 +13,11 @@ export default class Benchmarker<T extends IServerOptions> {
     }
 
     public async start(options: T): Promise<IBenchmarkResult[]> {
-        logger.log(`Creating server "${options.name}"...`);
+        logger.log(`Creating server "${options.id}"...`);
         const server = await this.provider.createServer(options);
         const serverInfo = await server.getInfo();
         try {
-            logger.log(`Connecting to server "${options.name}"...`);
+            logger.log(`Connecting to server "${options.id}"...`);
             const client = await server.connect();
             const ret = [];
 
@@ -30,7 +30,7 @@ export default class Benchmarker<T extends IServerOptions> {
 
             return ret;
         } finally {
-            logger.log(`Destroying server "${options.name}"...`);
+            logger.log(`Destroying server "${options.id}"...`);
             await this.provider.destroyServer(server);
         }
     }

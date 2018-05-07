@@ -1,7 +1,7 @@
 import {IServer} from "./IServer";
 
 export interface IServerOptions {
-    name: string;
+    id: string;
 }
 
 export interface IProvider<T extends IServerOptions> {

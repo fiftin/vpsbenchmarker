@@ -6,8 +6,10 @@ const logger = console;
 export default class HetznerServer implements IServer {
     public readonly serverInfo: any;
     private readonly clientOptions: ISshClientOptions;
+    private readonly id: string;
 
-    constructor(serverInfo: any, clientOptions: ISshClientOptions) {
+    constructor(id: string, serverInfo: any, clientOptions: ISshClientOptions) {
+        this.id = id;
         this.serverInfo = serverInfo;
         this.clientOptions = clientOptions;
     }
@@ -19,8 +21,10 @@ export default class HetznerServer implements IServer {
             city: datacenter.location.city,
             cores: serverType.cores,
             country: datacenter.location.country,
+            id: this.id,
             location: `${datacenter.location.latitude},${datacenter.location.longitude}`,
             memory: serverType.memory,
+            os: `${this.serverInfo.image.os_flavor} ${this.serverInfo.image.os_version}`,
             priceHourly: serverType.prices[0].price_hourly.net,
             priceMonthly: serverType.prices[0].price_monthly.net,
             volumeSize: serverType.disk,

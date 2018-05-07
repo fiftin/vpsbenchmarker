@@ -1,4 +1,5 @@
 export interface IServerInfo {
+    id: string;
     city: string;
     country: string;
     location: string;
@@ -8,6 +9,7 @@ export interface IServerInfo {
     volumeType: string;
     priceHourly: number;
     priceMonthly: number;
+    os: string;
 }
 
 export interface IServer {

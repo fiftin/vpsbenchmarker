@@ -10,6 +10,7 @@ export interface IHetznerSettings {
 }
 
 export interface IHetznerServerOptions extends IServerOptions {
+    name: string;
     image: string;
     type: string;
     privateKey: string;
@@ -58,7 +59,7 @@ export class Hetzner implements IProvider<IHetznerServerOptions> {
 
         await new Promise((resolve) => setTimeout(resolve, 60000));
 
-        return new HetznerServer(serverInfo.server, {
+        return new HetznerServer(options.id, serverInfo.server, {
             host: serverInfo.server.public_net.ipv4.ip,
             privateKey: options.privateKey,
             username: "root",

@@ -11,12 +11,13 @@ export enum BenchmarkStatus {
 }
 
 export interface IBenchmarkResult {
-   type: BenchmarkType;
-   status: BenchmarkStatus;
-   stdout: string;
-   env?: IServerInfo;
-   cpu?: IBenchmarkCpuResult;
-   io?: IBenchmarkIoResult;
+    benchmarkId?: string;
+    type: BenchmarkType;
+    status: BenchmarkStatus;
+    stdout: string;
+    env?: IServerInfo;
+    cpu?: IBenchmarkCpuResult;
+    io?: IBenchmarkIoResult;
 }
 
 export interface IBenchmarkIoResult {
@@ -30,5 +31,6 @@ export interface IBenchmarkCpuResult {
 }
 
 export interface IBenchmark {
+    id?: string;
     run(client: IClient): Promise<IBenchmarkResult>;
 }
