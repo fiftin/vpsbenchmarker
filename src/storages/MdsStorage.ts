@@ -1,11 +1,12 @@
-import {BenchmarkType, IBenchmarkResult} from "../IBenchmark";
+import {BenchmarkStatus, BenchmarkType, IBenchmarkResult} from "../IBenchmark";
 import {IStorage} from "../IStorage";
 
 const MDSCommon = require("mydataspace").MDSCommon;
 const MDSClient = require("mydataspace").MDSClient;
 
 interface IMdsStorageOptions {
-    apiToken: string;
+    clientId: string;
+    accessToken: string;
     root: string;
     path: string;
 }
@@ -18,19 +19,21 @@ export default class MdsStorage implements IStorage {
     }
 
     public async store(provider: string, results: IBenchmarkResult[]): Promise<void> {
-        const client = new MDSClient();
+        const client = new MDSClient({
+            clientId: this.options.clientId,
+            permission: this.options.root,
+        });
 
         await client.connect();
 
-        await new Promise((resolve, reject) => {
-            Mydataspace.on("login", resolve);
-            Mydataspace.on("unauthorized", () => reject(new Error("MyDataSpace authorization error")));
-        });
+        await client.loginByToken(this.options.accessToken);
 
         for (const result of results) {
+            const benchmarkType = BenchmarkType[result.type].toLowerCase();
+
             const fields = [
-                {name: "type", type: "s", value: result.type.toString().toLowerCase()},
-                {name: "status", type: "s", value: result.status.toString().toLowerCase()},
+                {name: "type", type: "s", value: benchmarkType},
+                {name: "status", type: "s", value: BenchmarkStatus[result.status]},
                 {name: "stdout", type: "s", value: result.stdout},
                 {name: "location", type: "s", value: result.env.location},
                 {name: "country", type: "s", value: result.env.country},
@@ -46,13 +49,13 @@ export default class MdsStorage implements IStorage {
 
             await client.entities.create({
                 fields,
-                path: `${this.options.root}/${result.type}/${provider}/${entityName}`,
+                path: `${this.options.path}/${benchmarkType}/${provider}/${entityName}`,
                 root: this.options.root,
             });
 
             await client.entities.update({
                 fields,
-                path: `${this.options.root}/${result.type}/${provider}`,
+                path: `${this.options.path}/${benchmarkType}/${provider}`,
                 root: this.options.root,
             });
         }

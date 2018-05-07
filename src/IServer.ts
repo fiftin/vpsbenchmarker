@@ -1,7 +1,13 @@
 export interface IServerInfo {
-    location: string;
-    country: string;
     city: string;
+    country: string;
+    location: string;
+    cores: number;
+    memory: number;
+    volumeSize: number;
+    volumeType: string;
+    priceHourly: number;
+    priceMonthly: number;
 }
 
 export interface IServer {

@@ -15,9 +15,10 @@ if (!argv.provider) {
 const config = require("../config.json");
 
 const storage: IStorage = new MdsStorage({
-    apiToken: config.storage,
-    path: config.path,
-    root: config.root,
+    accessToken: config.storage.accessToken,
+    clientId: config.storage.clientId,
+    path: config.storage.path,
+    root: config.storage.root,
 });
 
 function getProviderBenchmarks(providerId: string): Map<string, IBenchmark[]> {

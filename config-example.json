@@ -11,8 +11,9 @@
   },
 
   "storage": {
-    "apiToken": "<your-app-token-on-mydataspace>",
+    "clientId": "<your-app-id-on-mydataspace>",
     "root": "<your-root-name>",
+    "accessToken": "<your-access-token-on-mydataspace>",
     "path": "data"
   },
 

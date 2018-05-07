@@ -13,7 +13,19 @@ export default class HetznerServer implements IServer {
     }
 
     public async getInfo(): Promise<IServerInfo> {
-        return null;
+        const datacenter = this.serverInfo.datacenter;
+        const serverType = this.serverInfo.server_type;
+        return {
+            city: datacenter.location.city,
+            cores: serverType.cores,
+            country: datacenter.location.country,
+            location: `${datacenter.location.latitude},${datacenter.location.longitude}`,
+            memory: serverType.memory,
+            priceHourly: serverType.prices[0].price_hourly.net,
+            priceMonthly: serverType.prices[0].price_monthly.net,
+            volumeSize: serverType.disk,
+            volumeType: serverType.storage_type,
+        };
     }
 
     public async connect(): Promise<IClient> {
