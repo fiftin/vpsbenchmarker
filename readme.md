@@ -1,5 +1,5 @@
 ## VPS Benchmarker
-![Logo](https://raw.githubusercontent.com/fiftin/vpsbenchmarker/master/logo.png)
+![Logo](https://raw.githubusercontent.com/fiftin/vpsbenchmarker/master/logo-200.png)
 
 ### How it works
 
@@ -17,7 +17,7 @@
 
 ### How to use
 
-```npm run start --provider=hetzner --benchmarks=sysbench-cpu-2cores-2g```
+```npm run start --provider=hetzner --benchmarks=sysbench-cpu-1cores-2g,sysbench-cpu-2cores-4g```
 
 ### Configuration
 
