@@ -1,6 +1,6 @@
 ## VPS Benchmarker
 
-[Logo](https://raw.githubusercontent.com/fiftin/vpsbenchmarker/master/logo.png)
+![Logo](https://raw.githubusercontent.com/fiftin/vpsbenchmarker/master/logo.png)
 
 ### How it works
 
