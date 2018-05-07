@@ -2,10 +2,14 @@ import {argv} from "yargs";
 import Benchmarker from "./Benchmarker";
 import SysbenchCpuBenchmark from "./benchmarks/SysbenchCpuBenchmark";
 import {BenchmarkResult, IBenchmark} from "./IBenchmark";
+import {IStorage} from "./IStorage";
+import MdsStorage from "./MdsStorage";
 import ProviderFactory from "./ProviderFactory";
 import {IHetznerServerOptions} from "./providers/Hetzner";
 
 const config = require("./config.json");
+
+const storage: IStorage = new MdsStorage(config.storage);
 
 function getProviderBenchmarks(providerId: string): Map<string, IBenchmark[]> {
     const providerInfo = config.providers[providerId];
@@ -54,7 +58,7 @@ const logger = console;
         });
         results.set(serverId, serverResults);
     }
-    logger.log(results);
+    await storage.store(argv.provider, Array.from(results.values()));
 })().then(() => {
     process.exit();
 }, (err) => {

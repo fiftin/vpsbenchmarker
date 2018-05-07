@@ -18,7 +18,7 @@ export default class SysbenchCpuBenchmark implements IBenchmark {
         ret.stdout = await client.runCommand(`sysbench --test=cpu --num-threads=${this.options.threads} run`);
         ret.type = BenchmarkType.Cpu;
         ret.status = BenchmarkStatus.Success;
-        ret.state = Parsers.cpuSysbench.parse(ret.stdout);
+        const result = Parsers.cpuSysbench.parse(ret.stdout);
 
         return ret;
     }

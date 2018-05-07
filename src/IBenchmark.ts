@@ -11,8 +11,11 @@ export enum BenchmarkStatus {
 export class BenchmarkResult {
     public type: BenchmarkType;
     public status: BenchmarkStatus;
+    /**
+     * Output of benchmark test.
+     */
     public stdout: string;
-    public state: any;
+
 }
 
 export interface IBenchmark {
