@@ -1,8 +1,49 @@
 {
   "benchmarks": {
-    "sysbench-cpu-2-cores": {
+    "sysbench-cpu-1core": {
+      "type": "SysbenchCpuBenchmark",
+      "threads": 1
+    },
+    "sysbench-cpu-2cores": {
       "type": "SysbenchCpuBenchmark",
       "threads": 2
+    }
+  },
+
+  "storage": {
+    "apiToken": "<your-app-token-on-mydataspace>",
+    "root": "<your-root-name>"
+  },
+
+  "providers": {
+    "hetzner": {
+      "settings": {
+        "apiToken": "<your-hetzner-api-token>",
+        "sshKey": "<your-ssh-key-name-on-hetzner>",
+        "privateKey": "/home/your-user-name/.ssh/id_rsa"
+      },
+      "servers": {
+        "cx11-nbg1": {
+          "name": "cx11-ubuntu-16.04",
+          "type": "cx11",
+          "image": "ubuntu-16.04",
+          "location": "nbg1"
+        },
+        "cx21-nbg1": {
+          "name": "cx21-ubuntu-16.04",
+          "type": "cx21",
+          "image": "ubuntu-16.04",
+          "location": "nbg1"
+        }
+      },
+      "benchmarks": {
+        "sysbench-cpu-1core": {
+          "server": "cx11-nbg1"
+        },
+        "sysbench-cpu-2cores": {
+          "server": "cx21-nbg1"
+        }
+      }
     }
   }
 }
