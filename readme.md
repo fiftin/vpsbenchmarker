@@ -1,25 +1,12 @@
-## Skeleton for Node.js applications written in TypeScript
+## VPS Benchmarker
 
-### Development
+### How it works
 
-```bash
-npm run dev
-```
+* It creates virtual server with using cloud service API.
+* It connects to server over SSH and runs benchmarks.
+* It terminates server with using cloud service API.
+* It stores results to [mydataspace.org](https://mydataspace.org).
 
-### Running tests
 
-```bash
-npm test
-```
-
-### Linting
-
-```bash
-npm run lint
-```
-
-### Building a container
-
-```bash
-docker build .
-```
+### Supported services
+* [Hetzner](https://hetzner.cloud)

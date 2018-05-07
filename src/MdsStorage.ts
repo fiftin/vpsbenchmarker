@@ -1,4 +1,4 @@
-import {BenchmarkResult, IBenchmark} from "./IBenchmark";
+import {BenchmarkResult} from "./IBenchmark";
 import {IStorage} from "./IStorage";
 
 const mds = require("mydataspace");
