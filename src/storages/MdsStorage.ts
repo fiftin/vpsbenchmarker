@@ -22,6 +22,11 @@ export default class MdsStorage implements IStorage {
 
         await client.connect();
 
+        await new Promise((resolve, reject) => {
+            Mydataspace.on("login", resolve);
+            Mydataspace.on("unauthorized", () => reject(new Error("MyDataSpace authorization error")));
+        });
+
         for (const result of results) {
             const fields = [
                 {name: "type", type: "s", value: result.type.toString().toLowerCase()},
@@ -37,9 +42,11 @@ export default class MdsStorage implements IStorage {
                     break;
             }
 
+            const entityName = MDSCommon.dateToString(new Date());
+
             await client.entities.create({
                 fields,
-                path: `${this.options.root}/${result.type}/${provider}/${null}`,
+                path: `${this.options.root}/${result.type}/${provider}/${entityName}`,
                 root: this.options.root,
             });
 

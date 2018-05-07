@@ -1,11 +1,16 @@
 import {argv} from "yargs";
 import Benchmarker from "./Benchmarker";
 import SysbenchCpuBenchmark from "./benchmarks/SysbenchCpuBenchmark";
-import {IBenchmarkResult, IBenchmark} from "./IBenchmark";
+import {IBenchmark, IBenchmarkResult} from "./IBenchmark";
 import {IStorage} from "./IStorage";
-import MdsStorage from "./storages/MdsStorage";
 import ProviderFactory from "./ProviderFactory";
 import {IHetznerServerOptions} from "./providers/Hetzner";
+import MdsStorage from "./storages/MdsStorage";
+
+if (!argv.provider) {
+    throw new Error(`Provider does not specified. Please specify ` +
+        `provider in command line in format "--provider=hetzner"`);
+}
 
 const config = require("../config.json");
 

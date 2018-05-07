@@ -20,7 +20,7 @@
     "@types/ssh2": "^0.5.35",
     "@types/yargs": "^11.0.0",
     "express": "4.15.3",
-    "mydataspace": "^2.1.13",
+    "mydataspace": "^3.0.0",
     "nodemon": "1.11.0",
     "request": "^2.85.0",
     "request-promise-native": "^1.0.5",
