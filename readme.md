@@ -1,5 +1,7 @@
 ## VPS Benchmarker
 
+[Logo](https://raw.githubusercontent.com/fiftin/vpsbenchmarker/master/logo.png)
+
 ### How it works
 
 * It creates virtual server with using cloud service API.
