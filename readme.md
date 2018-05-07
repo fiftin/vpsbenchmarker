@@ -21,6 +21,31 @@
 
 ### Configuration
 
-Configuration reads from ```config.json```.
+Configuration reads from ```config.json```. Example of configuration you can find in ```config-example.json```.
 
+Config contains 3 root sections:
+* ```benchmarks```
+* ```storage```
+* ```providers```
 
+Below for details of each.
+
+#### ```benchmarks```
+Example:
+```json
+{
+  "benchmarks": {
+    "sysbench-cpu-1core": {
+      "type": "SysbenchCpuBenchmark",
+      "threads": 1
+    }
+  }
+}
+```
+
+Each benchmark has unique name (`sysbench-cpu-1core`). It uses to link from other sections of configuration.
+
+`type` specifies with type of benchmark should be used. Available next type:
+* `SysbenchCpuBenchmark` - CPU benchmark with using tool [sysbench](https://github.com/akopytov/sysbench). <br>
+    Options: <br>
+    `threads` &mdash; Number of threads.
