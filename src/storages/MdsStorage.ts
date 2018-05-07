@@ -31,10 +31,10 @@ export default class MdsStorage implements IStorage {
         for (const result of results) {
             const benchmarkType = BenchmarkType[result.type].toLowerCase();
 
-            const fields = [
+            const fields =  [
                 {name: "type", type: "s", value: benchmarkType},
                 {name: "status", type: "s", value: BenchmarkStatus[result.status]},
-                {name: "stdout", type: "s", value: result.stdout},
+                {name: "stdout", type: "j", value: result.stdout},
                 {name: "location", type: "s", value: result.env.location},
                 {name: "country", type: "s", value: result.env.country},
                 {name: "city", type: "s", value: result.env.city},
