@@ -1,5 +1,5 @@
-import {BenchmarkResult} from "./IBenchmark";
+import {IBenchmarkResult} from "./IBenchmark";
 
 export interface IStorage {
-    store(provider: string, results: BenchmarkResult[]): Promise<void>;
+    store(provider: string, results: IBenchmarkResult[]): Promise<void>;
 }

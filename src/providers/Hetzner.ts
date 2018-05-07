@@ -1,4 +1,6 @@
 import HetznerServer from "./HetznerServer";
+import {IServer} from "../IServer";
+import {IProvider, IServerOptions} from "../IProvider";
 
 const requestPromise = require("request-promise-native");
 

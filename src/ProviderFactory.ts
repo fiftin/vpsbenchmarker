@@ -1,3 +1,4 @@
+import {IProvider, IServerOptions} from "./IProvider";
 import {Hetzner} from "./providers/Hetzner";
 
 const config = require("../config.json");

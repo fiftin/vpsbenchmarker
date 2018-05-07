@@ -12,7 +12,8 @@
 
   "storage": {
     "apiToken": "<your-app-token-on-mydataspace>",
-    "root": "<your-root-name>"
+    "root": "<your-root-name>",
+    "path": "data"
   },
 
   "providers": {

@@ -1,3 +1,4 @@
+import {IServer, IServerInfo} from "../IServer";
 import {ISshClientOptions, SshClient} from "../SshClient";
 
 const logger = console;
@@ -9,6 +10,10 @@ export default class HetznerServer implements IServer {
     constructor(serverInfo: any, clientOptions: ISshClientOptions) {
         this.serverInfo = serverInfo;
         this.clientOptions = clientOptions;
+    }
+
+    public async getInfo(): Promise<IServerInfo> {
+        return null;
     }
 
     public async connect(): Promise<IClient> {

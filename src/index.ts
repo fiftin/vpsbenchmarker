@@ -1,15 +1,19 @@
 import {argv} from "yargs";
 import Benchmarker from "./Benchmarker";
 import SysbenchCpuBenchmark from "./benchmarks/SysbenchCpuBenchmark";
-import {BenchmarkResult, IBenchmark} from "./IBenchmark";
+import {IBenchmarkResult, IBenchmark} from "./IBenchmark";
 import {IStorage} from "./IStorage";
-import MdsStorage from "./MdsStorage";
+import MdsStorage from "./storages/MdsStorage";
 import ProviderFactory from "./ProviderFactory";
 import {IHetznerServerOptions} from "./providers/Hetzner";
 
 const config = require("../config.json");
 
-const storage: IStorage = new MdsStorage(config.storage);
+const storage: IStorage = new MdsStorage({
+    apiToken: config.storage,
+    path: config.path,
+    root: config.root,
+});
 
 function getProviderBenchmarks(providerId: string): Map<string, IBenchmark[]> {
     const providerInfo = config.providers[providerId];
@@ -44,7 +48,8 @@ function getProviderBenchmarks(providerId: string): Map<string, IBenchmark[]> {
 const logger = console;
 
 (async () => {
-    const results = new Map<string, BenchmarkResult[]>();
+    const resultsArray: IBenchmarkResult[] = [];
+
     const providerInfo = config.providers[argv.provider];
     const provider = new ProviderFactory().createProvider(argv.provider, providerInfo.settings);
     for (const [serverId, serverBenchmarks] of getProviderBenchmarks(argv.provider)) {
@@ -56,9 +61,10 @@ const logger = console;
             privateKey: providerInfo.settings.privateKey,
             type: providerInfo.servers[serverId].type,
         });
-        results.set(serverId, serverResults);
+        resultsArray.push(...serverResults);
     }
-    await storage.store(argv.provider, Array.from(results.values()));
+
+    await storage.store(argv.provider, resultsArray);
 })().then(() => {
     process.exit();
 }, (err) => {

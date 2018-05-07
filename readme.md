@@ -17,7 +17,7 @@
 
 ### How to use
 
-```npm run start --provider=hetzner --benchmarks=sysbench-cpu-1cores-2g,sysbench-cpu-2cores-4g```
+```npm run start --provider=hetzner --benchmarks=sysbench-cpu-1core-2g,sysbench-cpu-2cores-4g```
 
 ### Configuration
 
@@ -45,7 +45,7 @@ Example:
 
 Each benchmark has unique name (`sysbench-cpu-1core`). It uses to link from other sections of configuration.
 
-`type` specifies with type of benchmark should be used. Available next type:
+`type` specifies witch type of benchmark should be used. Available next types:
 * `SysbenchCpuBenchmark` - CPU benchmark with using tool [sysbench](https://github.com/akopytov/sysbench). <br>
     Options: <br>
     `threads` &mdash; Number of threads.

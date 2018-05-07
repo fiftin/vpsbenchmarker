@@ -1,3 +1,5 @@
+import {IServerInfo} from "./IServer";
+
 export enum BenchmarkType {
     Cpu,
     IO,
@@ -8,16 +10,25 @@ export enum BenchmarkStatus {
     Success,
 }
 
-export class BenchmarkResult {
-    public type: BenchmarkType;
-    public status: BenchmarkStatus;
-    /**
-     * Output of benchmark test.
-     */
-    public stdout: string;
+export interface IBenchmarkResult {
+   type: BenchmarkType;
+   status: BenchmarkStatus;
+   stdout: string;
+   env?: IServerInfo;
+   cpu?: IBenchmarkCpuResult;
+   io?: IBenchmarkIoResult;
+}
 
+export interface IBenchmarkIoResult {
+    total: number;
+}
+
+export interface IBenchmarkCpuResult {
+    totalTime: number;
+    totalNumberOfEvents: number;
+    numberOfThreads: number;
 }
 
 export interface IBenchmark {
-    run(client: IClient): Promise<BenchmarkResult>;
+    run(client: IClient): Promise<IBenchmarkResult>;
 }
