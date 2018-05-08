@@ -46,6 +46,10 @@ Example:
 Each benchmark has unique name (`sysbench-cpu-1core`). It uses to link from other sections of configuration.
 
 `type` specifies witch type of benchmark should be used. Available next types:
-* `SysbenchCpuBenchmark` - CPU benchmark with using tool [sysbench](https://github.com/akopytov/sysbench). <br>
+* `SysbenchCpuBenchmark` &mdash; CPU benchmark with using tool [sysbench](https://github.com/akopytov/sysbench). <br>
     Options: <br>
     `threads` &mdash; Number of threads.
+* `SysbenchIOBenchmark` &mdash; I/O benchmark with using tool [sysbench](https://github.com/akopytov/sysbench). <br>
+    Options: <br>
+    `size` &mdash; Space in gigabytes should be use for benchmarking.
+* `SysbenchMysqlBenchmark` &mdash; MySQL benchmark with using tool [sysbench](https://github.com/akopytov/sysbench). <br>
