@@ -11,6 +11,7 @@
   },
 
   "storage": {
+    "type": "MdsStorage",
     "clientId": "<your-app-id-on-mydataspace>",
     "root": "<your-root-name>",
     "accessToken": "<your-access-token-on-mydataspace>",

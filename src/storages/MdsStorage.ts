@@ -51,6 +51,11 @@ export default class MdsStorage implements IStorage {
 
             switch (result.type) {
                 case BenchmarkType.Cpu:
+                    fields.push(...[
+                        {name: "totalTime", type: "r", value: result.cpu.totalTime},
+                        {name: "totalNumberOfEvents", type: "i", value: result.cpu.totalNumberOfEvents},
+                        {name: "numberOfThreads", type: "i", value: result.cpu.numberOfThreads},
+                    ]);
                     break;
             }
 
