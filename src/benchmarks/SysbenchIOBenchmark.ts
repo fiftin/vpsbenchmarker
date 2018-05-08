@@ -1,31 +1,24 @@
 import {BenchmarkStatus, BenchmarkType, IBenchmark, IBenchmarkResult} from "../IBenchmark";
 import Parsers from "../parsing/Parsers";
+import SysbenchBenchmark from "./SysbenchBenchmark";
 
-export default class SysbenchIOBenchmark implements IBenchmark {
-    private options: any;
-
+export default class SysbenchIOBenchmark extends SysbenchBenchmark {
     constructor(options: any) {
-        this.options = options;
+        super(options);
     }
 
     public async run(client: IClient): Promise<IBenchmarkResult> {
-        // await client.runCommand("sudo -s");
-        await client.runCommand("apt update");
-        await client.runCommand("apt install sysbench -y");
-
-        const stdout = await client.runCommand(`sysbench --test=fileio run`);
-
-        const result = Parsers.cpuSysbench.parse(stdout);
-
+        await this.prepare(client);
+        const command = `sysbench --test=fileio ${this.getArgsString()}`;
+        await client.runCommand(`${command} prepare`);
+        const stdout = await client.runCommand(`${command} run`);
+        await client.runCommand(`${command} cleanup`);
+        const metrics = Parsers.ioSysbench.parse(stdout);
         return {
-            cpu: {
-                numberOfThreads: result.numberOfThreads,
-                totalNumberOfEvents: result.totalNumberOfEvents,
-                totalTime: result.totalTime,
-            },
+            metrics,
             status: BenchmarkStatus.Success,
             stdout,
-            type: BenchmarkType.Cpu,
+            type: BenchmarkType.IO,
         };
     }
 }

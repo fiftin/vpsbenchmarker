@@ -51,5 +51,5 @@ Each benchmark has unique name (`sysbench-cpu-1core`). It uses to link from othe
     `threads` &mdash; Number of threads.
 * `SysbenchIOBenchmark` &mdash; I/O benchmark with using tool [sysbench](https://github.com/akopytov/sysbench). <br>
     Options: <br>
-    `size` &mdash; Space in gigabytes should be use for benchmarking.
+    `size` &mdash; Space in gigabytes should be used for benchmarking.
 * `SysbenchMysqlBenchmark` &mdash; MySQL benchmark with using tool [sysbench](https://github.com/akopytov/sysbench). <br>

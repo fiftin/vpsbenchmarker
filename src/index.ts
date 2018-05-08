@@ -6,6 +6,7 @@ import {IStorage} from "./IStorage";
 import ProviderFactory from "./ProviderFactory";
 import {IHetznerServerOptions} from "./providers/Hetzner";
 import MdsStorage from "./storages/MdsStorage";
+import SysbenchIOBenchmark from "./benchmarks/SysbenchIOBenchmark";
 
 if (!argv.provider) {
     throw new Error(`Provider does not specified. Please specify ` +
@@ -40,11 +41,20 @@ function getProviderBenchmarks(providerId: string): Map<string, IBenchmark[]> {
         }
         let benchmark;
         switch (config.benchmarks[benchmarkId].type) {
-            case "SysbenchCpuBenchmark":
-                benchmark = new SysbenchCpuBenchmark(config.benchmarks[benchmarkId]);
+            case "sysbench":
+                switch (config.benchmarks[benchmarkId].test) {
+                    case "cpu":
+                        benchmark = new SysbenchCpuBenchmark(config.benchmarks[benchmarkId]);
+                        break;
+                    case "fileio":
+                        benchmark = new SysbenchIOBenchmark(config.benchmarks[benchmarkId]);
+                        break;
+                    default:
+                        throw new Error(`Unsupported sysbench test "${config.benchmarks[benchmarkId].test}"`);
+                }
                 break;
             default:
-                throw new Error(`Unknown benchmark type ${config.benchmarks[benchmarkId].type}`);
+                throw new Error(`Unknown benchmark type "${config.benchmarks[benchmarkId].type}"`);
         }
         benchmark.id = benchmarkId;
         serverBenchmarks.push(benchmark);

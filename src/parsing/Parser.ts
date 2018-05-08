@@ -17,8 +17,8 @@ export default class Parser {
         this.templates = new Map<string, IFieldTemplate>(templates);
     }
 
-    public parse(str: string): any {
-        const ret = {};
+    public parse(str: string): Map<string, any> {
+        const ret = new Map<string, any>();
 
         for (const line of str.split("\n")) {
             for (const [field, template] of this.templates) {
@@ -28,13 +28,13 @@ export default class Parser {
                 }
                 switch (template.type) {
                     case FieldType.Int:
-                        ret[field] = parseInt(m[template.indexInRegexp], 10);
+                        ret.set(field, parseInt(m[template.indexInRegexp], 10));
                         break;
                     case FieldType.Float:
-                        ret[field] = parseFloat(m[template.indexInRegexp]);
+                        ret.set(field, parseFloat(m[template.indexInRegexp]));
                         break;
                     default:
-                        ret[field] = m[template.indexInRegexp];
+                        ret.set(field, template.indexInRegexp);
                         break;
                 }
             }

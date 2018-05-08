@@ -49,14 +49,9 @@ export default class MdsStorage implements IStorage {
                 {name: "os", type: "s", value: result.env.os},
             ];
 
-            switch (result.type) {
-                case BenchmarkType.Cpu:
-                    fields.push(...[
-                        {name: "totalTime", type: "r", value: result.cpu.totalTime},
-                        {name: "totalNumberOfEvents", type: "i", value: result.cpu.totalNumberOfEvents},
-                        {name: "numberOfThreads", type: "i", value: result.cpu.numberOfThreads},
-                    ]);
-                    break;
+            for (const [name, value] of result.metrics) {
+                const type = typeof value === "string" ? "s" : "r";
+                fields.push({name, type, value});
             }
 
             const entityName = MDSCommon.dateToString(new Date());

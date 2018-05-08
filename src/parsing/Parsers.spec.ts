@@ -5,7 +5,7 @@ describe("Parsers", () => {
     it("Should parse sysbench total time", () => {
         const res = Parsers.cpuSysbench.parse(
             "    total time:                          9.6701s\n");
-        expect(res.totalTime).to.eq(9.6701);
+        expect(res.get("totalTime")).to.eq(9.6701);
     });
 
     it("Should parse CPU sysbench results", () => {
@@ -36,6 +36,6 @@ describe("Parsers", () => {
             "Threads fairness:\n" +
             "    events (avg/stddev):           10000.0000/57.00\n" +
             "    execution time (avg/stddev):   9.6680/0.00\n");
-        expect(res.totalTime).to.eq(9.6701);
+        expect(res.get("totalTime")).to.eq(9.6701);
     });
 });

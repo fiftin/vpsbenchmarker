@@ -15,9 +15,8 @@ export interface IBenchmarkResult {
     type: BenchmarkType;
     status: BenchmarkStatus;
     stdout: string;
+    metrics: Map<string, any>;
     env?: IServerInfo;
-    cpu?: IBenchmarkCpuResult;
-    io?: IBenchmarkIoResult;
 }
 
 export interface IBenchmarkIoResult {
