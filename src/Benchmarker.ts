@@ -23,9 +23,10 @@ export default class Benchmarker<T extends IServerOptions> {
 
             for (const benchmark of this.benchmarks) {
                 logger.log(`Running benchmark "${benchmark.constructor.name}"...`);
-                const results = await benchmark.run(client);
-                results.env = serverInfo;
-                ret.push(results);
+                const result = await benchmark.run(client);
+                result.env = serverInfo;
+                result.benchmarkId = benchmark.id;
+                ret.push(result);
             }
 
             return ret;

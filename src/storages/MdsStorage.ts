@@ -43,10 +43,10 @@ export default class MdsStorage implements IStorage {
                 {name: "cores", type: "i", value: result.env.cores},
                 {name: "memory", type: "i", value: result.env.memory},
                 {name: "volumeSize", type: "i", value: result.env.volumeSize},
-                {name: "volumeType", type: "i", value: result.env.volumeType},
+                {name: "volumeType", type: "s", value: result.env.volumeType},
                 {name: "serverId", type: "s", value: result.env.id},
                 {name: "benchmarkId", type: "s", value: result.benchmarkId},
-
+                {name: "os", type: "s", value: result.env.os},
             ];
 
             switch (result.type) {
