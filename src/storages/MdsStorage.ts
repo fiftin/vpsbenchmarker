@@ -58,7 +58,7 @@ export default class MdsStorage implements IStorage {
 
             await client.entities.create({
                 fields,
-                path: `${this.options.path}/${result.benchmarkId}/${provider}/${entityName}`,
+                path: `${this.options.path}/${result.benchmarkId}/${provider}/${result.env.id}-${entityName}`,
                 root: this.options.root,
             });
 
