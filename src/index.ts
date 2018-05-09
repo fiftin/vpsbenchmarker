@@ -25,12 +25,9 @@ const storage: IStorage = new MdsStorage({
 function getProviderBenchmarks(providerId: string): Map<string, IBenchmark[]> {
     const providerInfo = config.providers[providerId];
 
-    const benchmarks = argv.benchmarks ?
-        argv.benchmarks.split(",") :
-        Object.keys(providerInfo.benchmarks);
-
-    return benchmarks.reduce((result, benchmarkId) => {
-        const serverId = providerInfo.benchmarks[benchmarkId].server;
+    return providerInfo.benchmarks.reduce((result, benchmarkInfo) => {
+        const benchmarkId = benchmarkInfo.benchmark;
+        const serverId = benchmarkInfo.server;
         let serverBenchmarks = result.get(serverId);
         if (serverBenchmarks == null) {
             serverBenchmarks = [];
