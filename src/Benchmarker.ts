@@ -1,3 +1,4 @@
+import {v4 as uuid} from "uuid";
 import {IBenchmark, IBenchmarkResult} from "./IBenchmark";
 import {IProvider, IServerOptions} from "./IProvider";
 
@@ -14,6 +15,7 @@ export default class Benchmarker<T extends IServerOptions> {
 
     public async start(options: T): Promise<IBenchmarkResult[]> {
         logger.log(`Creating server "${options.id}"...`);
+        const testId = uuid();
         const server = await this.provider.createServer(options);
         const serverInfo = await server.getInfo();
         try {
@@ -26,6 +28,7 @@ export default class Benchmarker<T extends IServerOptions> {
                 const result = await benchmark.run(client);
                 result.env = serverInfo;
                 result.benchmarkId = benchmark.id;
+                result.testId = testId;
                 ret.push(result);
             }
 

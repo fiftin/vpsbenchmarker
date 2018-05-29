@@ -12,6 +12,7 @@ export enum BenchmarkStatus {
 
 export interface IBenchmarkResult {
     benchmarkId?: string;
+    testId?: string;
     type: BenchmarkType;
     status: BenchmarkStatus;
     stdout: string;
