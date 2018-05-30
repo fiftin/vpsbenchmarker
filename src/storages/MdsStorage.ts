@@ -48,6 +48,7 @@ export default class MdsStorage implements IStorage {
                 {name: "benchmarkId",   type: "s", value: result.benchmarkId},
                 {name: "os",            type: "s", value: result.env.os},
                 {name: "testId",        type: "s", value: result.testId},
+                {name: "rating",        type: "i", value: result.rating},
             ];
 
             for (const [name, value] of result.metrics) {

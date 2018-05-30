@@ -13,6 +13,7 @@ export enum BenchmarkStatus {
 export interface IBenchmarkResult {
     benchmarkId?: string;
     testId?: string;
+    rating?: number;
     type: BenchmarkType;
     status: BenchmarkStatus;
     stdout: string;

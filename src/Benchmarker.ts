@@ -21,7 +21,7 @@ export default class Benchmarker<T extends IServerOptions> {
         try {
             logger.log(`Connecting to server "${options.id}"...`);
             const client = await server.connect();
-            const ret = [];
+            const ret = new Array<IBenchmarkResult>();
 
             for (const benchmark of this.benchmarks) {
                 logger.log(`Running benchmark "${benchmark.constructor.name}"...`);
@@ -31,6 +31,28 @@ export default class Benchmarker<T extends IServerOptions> {
                 result.testId = testId;
                 ret.push(result);
             }
+
+            let rating = 0;
+            for (const benchmarkResult of ret) {
+                switch (benchmarkResult.benchmarkId) {
+                    case "sysbench-cpu-1core":
+                    case "sysbench-cpu-2cores":
+                    case "sysbench-cpu-4cores":
+                    case "sysbench-cpu-8cores":
+                        rating += 1000 / benchmarkResult.metrics.get("totalTime");
+                        break;
+                    case "sysbench-fileio-10g":
+                    case "sysbench-fileio-20g":
+                    case "sysbench-fileio-40g":
+                        rating += 4000 / benchmarkResult.metrics.get("totalTime");
+                        break;
+                }
+            }
+            rating += 360;
+
+            ret.forEach((result) => {
+                result.rating = rating;
+            });
 
             return ret;
         } finally {
