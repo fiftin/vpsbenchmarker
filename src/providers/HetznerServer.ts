@@ -27,6 +27,7 @@ export default class HetznerServer implements IServer {
             os: `${this.serverInfo.image.os_flavor} ${this.serverInfo.image.os_version}`,
             priceHourly: serverType.prices[0].price_hourly.net,
             priceMonthly: serverType.prices[0].price_monthly.net,
+            transfer: serverType.transfer || 0,
             volumeSize: serverType.disk,
             volumeType: serverType.storage_type,
         };

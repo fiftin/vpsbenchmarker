@@ -14,6 +14,7 @@ export interface IBenchmarkResult {
     benchmarkId?: string;
     testId?: string;
     rating?: number;
+    serverRating?: number;
     type: BenchmarkType;
     status: BenchmarkStatus;
     stdout: string;

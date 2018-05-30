@@ -45,10 +45,12 @@ export default class MdsStorage implements IStorage {
                 {name: "volumeSize",    type: "i", value: result.env.volumeSize},
                 {name: "volumeType",    type: "s", value: result.env.volumeType},
                 {name: "serverId",      type: "s", value: result.env.id},
+                {name: "transfer",      type: "i", value: result.env.transfer},
                 {name: "benchmarkId",   type: "s", value: result.benchmarkId},
                 {name: "os",            type: "s", value: result.env.os},
                 {name: "testId",        type: "s", value: result.testId},
                 {name: "rating",        type: "i", value: result.rating},
+                {name: "serverRating",  type: "i", value: result.serverRating},
             ];
 
             for (const [name, value] of result.metrics) {
@@ -57,6 +59,22 @@ export default class MdsStorage implements IStorage {
             }
 
             const entityName = MDSCommon.dateToString(new Date());
+
+            try {
+                await client.entities.get({
+                    path: `${this.options.path}/${result.benchmarkId}/${result.env.id}`,
+                    root: this.options.root,
+                });
+            } catch (e) {
+                await client.entities.create({
+                    childPrototype: {
+                        path: "protos/result",
+                        root: this.options.root,
+                    },
+                    path: `${this.options.path}/${result.benchmarkId}/${result.env.id}`,
+                    root: this.options.root,
+                });
+            }
 
             await client.entities.create({
                 fields,
@@ -69,6 +87,13 @@ export default class MdsStorage implements IStorage {
                 path: `${this.options.path}/${result.benchmarkId}/${result.env.id}`,
                 root: this.options.root,
             });
+
+            await client.entities.change({
+                fields: [{name: "rating", value: result.rating}],
+                path: `website/servers/${result.env.id}`,
+                root: this.options.root,
+            });
+
         }
     }
 }

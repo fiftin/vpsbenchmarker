@@ -5,25 +5,70 @@ import {IProvider, IServerOptions} from "./IProvider";
 const logger = console;
 
 export default class Benchmarker<T extends IServerOptions> {
-    public static calcRating(results: IBenchmarkResult[]): number {
-        let rating = 0;
+    public static calcRating(benchmarkResult: IBenchmarkResult): number {
+        let rating: number;
+        switch (benchmarkResult.benchmarkId) {
+            case "sysbench-cpu-1core":
+            case "sysbench-cpu-2cores":
+            case "sysbench-cpu-4cores":
+            case "sysbench-cpu-8cores":
+                rating = 500 * benchmarkResult.metrics.get("totalNumberOfEvents") / 40000;
+                break;
+            case "sysbench-fileio-10g":
+            case "sysbench-fileio-20g":
+            case "sysbench-fileio-40g":
+                rating = 500 * benchmarkResult.metrics.get("totalNumberOfEvents") / 100000;
+                break;
+            case "sysbench-memory":
+                rating = 500 * benchmarkResult.metrics.get("totalNumberOfEvents") / 90000000;
+                break;
+            default:
+                throw new Error(`Unknown benchmark ${benchmarkResult.benchmarkId}`);
+        }
+        return Math.floor(rating);
+    }
+
+    public static calcTotalRating(results: IBenchmarkResult[]): number {
+        let cpuRating = 0;
+        let memoryRating = 0;
+        let fileioRating = 0;
+        const networkRating = 800;
+        const oltpRating = 1000;
+
         for (const benchmarkResult of results) {
             switch (benchmarkResult.benchmarkId) {
                 case "sysbench-cpu-1core":
                 case "sysbench-cpu-2cores":
                 case "sysbench-cpu-4cores":
                 case "sysbench-cpu-8cores":
-                    rating += 1000 / benchmarkResult.metrics.get("totalTime");
+                    if (!cpuRating) {
+                        cpuRating = benchmarkResult.rating;
+                    }
                     break;
                 case "sysbench-fileio-10g":
                 case "sysbench-fileio-20g":
                 case "sysbench-fileio-40g":
-                    rating += 4000 / benchmarkResult.metrics.get("totalTime");
+                    if (!fileioRating) {
+                        fileioRating = benchmarkResult.rating;
+                    }
+                    break;
+                case "sysbench-memory":
+                    if (!memoryRating) {
+                        memoryRating = benchmarkResult.rating;
+                    }
                     break;
             }
         }
-        rating += 360;
-        return rating;
+
+        const diskSpaceRating = Math.floor(500 * results[0].env.volumeSize / 20);
+        const memorySizeRating = Math.floor(500 * results[0].env.memory);
+        const transferRating = Math.floor(200 * results[0].env.transfer);
+
+        return cpuRating +
+            fileioRating + diskSpaceRating +
+            memoryRating + memorySizeRating +
+            networkRating + transferRating +
+            oltpRating;
     }
 
     private readonly provider: IProvider<T>;
@@ -50,12 +95,14 @@ export default class Benchmarker<T extends IServerOptions> {
                 result.env = serverInfo;
                 result.benchmarkId = benchmark.id;
                 result.testId = testId;
+                result.rating = Benchmarker.calcRating(result);
                 ret.push(result);
+                await new Promise((resolve) => setTimeout(resolve, 20000));
             }
 
-            const rating = Benchmarker.calcRating(ret);
+            const rating = Benchmarker.calcTotalRating(ret);
 
-            ret.forEach((result) => result.rating = rating);
+            ret.forEach((result) => result.serverRating = rating);
 
             return ret;
         } finally {

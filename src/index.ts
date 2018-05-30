@@ -7,6 +7,7 @@ import ProviderFactory from "./ProviderFactory";
 import {IHetznerServerOptions} from "./providers/Hetzner";
 import MdsStorage from "./storages/MdsStorage";
 import SysbenchIOBenchmark from "./benchmarks/SysbenchIOBenchmark";
+import SysbenchMemoryBenchmark from "./benchmarks/SysbenchMemoryBenchmark";
 
 if (!argv.provider) {
     throw new Error(`Provider does not specified. Please specify ` +
@@ -46,6 +47,9 @@ function getProviderBenchmarks(providerId: string): Map<string, IBenchmark[]> {
                     case "fileio":
                         benchmark = new SysbenchIOBenchmark(config.benchmarks[benchmarkId]);
                         break;
+                    case "memory":
+                        benchmark = new SysbenchMemoryBenchmark(config.benchmarks[benchmarkId]);
+                        break;
                     default:
                         throw new Error(`Unsupported sysbench test "${config.benchmarks[benchmarkId].test}"`);
                 }
@@ -62,7 +66,7 @@ function getProviderBenchmarks(providerId: string): Map<string, IBenchmark[]> {
 const logger = console;
 
 (async () => {
-    const resultsArray: IBenchmarkResult[] = [];
+    // const resultsArray: IBenchmarkResult[] = [];
 
     const providerInfo = config.providers[argv.provider];
     const provider = new ProviderFactory().createProvider(argv.provider, providerInfo.settings);
@@ -76,10 +80,11 @@ const logger = console;
             privateKey: providerInfo.settings.privateKey,
             type: providerInfo.servers[serverId].type,
         });
-        resultsArray.push(...serverResults);
+        // resultsArray.push(...serverResults);
+        await storage.store(argv.provider, serverResults);
     }
 
-    await storage.store(argv.provider, resultsArray);
+    // await storage.store(argv.provider, resultsArray);
 })().then(() => {
     process.exit();
 }, (err) => {

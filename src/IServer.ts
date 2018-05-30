@@ -9,6 +9,7 @@ export interface IServerInfo {
     volumeType: string;
     priceHourly: number;
     priceMonthly: number;
+    transfer: number;
     os: string;
 }
 
