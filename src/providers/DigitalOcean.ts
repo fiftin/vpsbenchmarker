@@ -24,7 +24,7 @@ export class DigitalOcean implements IProvider<IDigitalOceanServerOptions> {
     }
 
     public async createServer(options: IDigitalOceanServerOptions): Promise<IServer> {
-        const serverInfo = await requestPromise({
+        let serverInfo = await requestPromise({
             body: {
                 backups: false,
                 image: options.image,
@@ -50,7 +50,7 @@ export class DigitalOcean implements IProvider<IDigitalOceanServerOptions> {
         while (true) {
             await new Promise((resolve) => setTimeout(resolve, 10000));
 
-            const info = await requestPromise({
+            serverInfo = await requestPromise({
                 headers: {
                     "Authorization": `Bearer ${this.settings.apiToken}`,
                     "Content-Type": "application/json",
@@ -59,7 +59,7 @@ export class DigitalOcean implements IProvider<IDigitalOceanServerOptions> {
                 method: "GET",
                 uri: `https://api.digitalocean.com/v2/droplets/${serverInfo.droplet.id}`,
             });
-            if (info.droplet.status === "active") {
+            if (serverInfo.droplet.status === "active") {
                 break;
             }
         }
@@ -67,7 +67,7 @@ export class DigitalOcean implements IProvider<IDigitalOceanServerOptions> {
         await new Promise((resolve) => setTimeout(resolve, 60000));
 
         return new DigitalOceanServer(options.id, serverInfo.droplet, {
-            host: serverInfo.droplet.networks.v4.ip_address,
+            host: serverInfo.droplet.networks.v4[0].ip_address,
             privateKey: options.privateKey,
             username: "root",
         });
