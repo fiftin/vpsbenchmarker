@@ -3,6 +3,8 @@ import {IServerInfo} from "./IServer";
 export enum BenchmarkType {
     Cpu,
     IO,
+    Memory,
+    Network,
 }
 
 export enum BenchmarkStatus {

@@ -1,4 +1,5 @@
 import {IProvider, IServerOptions} from "./IProvider";
+import {DigitalOcean} from "./providers/DigitalOcean";
 import {Hetzner} from "./providers/Hetzner";
 
 const config = require("../config.json");
@@ -11,6 +12,12 @@ export default class ProviderFactory {
             return new Hetzner({
                 apiToken: config.providers.hetzner.settings.apiToken,
                 sshKey: config.providers.hetzner.settings.sshKey,
+            });
+        });
+        this.providerCreators.set("digitalocean", () => {
+            return new DigitalOcean({
+                apiToken: config.providers.digitalocean.settings.apiToken,
+                sshKey: config.providers.digitalocean.settings.sshKey,
             });
         });
     }

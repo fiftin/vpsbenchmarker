@@ -89,7 +89,7 @@ export default class MdsStorage implements IStorage {
             });
 
             await client.entities.change({
-                fields: [{name: "rating", value: result.rating}],
+                fields: [{name: "rating", value: result.serverRating}],
                 path: `website/servers/${result.env.id}`,
                 root: this.options.root,
             });

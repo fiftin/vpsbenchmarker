@@ -17,7 +17,7 @@ export default class Benchmarker<T extends IServerOptions> {
             case "sysbench-fileio-10g":
             case "sysbench-fileio-20g":
             case "sysbench-fileio-40g":
-                rating = 500 * benchmarkResult.metrics.get("totalNumberOfEvents") / 100000;
+                rating = 500 * benchmarkResult.metrics.get("totalNumberOfEvents") / 400000;
                 break;
             case "sysbench-memory":
                 rating = 500 * benchmarkResult.metrics.get("totalNumberOfEvents") / 90000000;
@@ -62,7 +62,7 @@ export default class Benchmarker<T extends IServerOptions> {
 
         const diskSpaceRating = Math.floor(500 * results[0].env.volumeSize / 20);
         const memorySizeRating = Math.floor(500 * results[0].env.memory);
-        const transferRating = Math.floor(200 * results[0].env.transfer);
+        const transferRating = Math.floor(200 * results[0].env.transfer / 5);
 
         return cpuRating +
             fileioRating + diskSpaceRating +

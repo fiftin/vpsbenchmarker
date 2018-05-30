@@ -15,7 +15,7 @@ export default class SysbenchMemoryBenchmark extends SysbenchBenchmark {
             metrics,
             status: BenchmarkStatus.Success,
             stdout,
-            type: BenchmarkType.Cpu,
+            type: BenchmarkType.Memory,
         };
     }
 }

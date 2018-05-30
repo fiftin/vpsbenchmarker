@@ -1,13 +1,13 @@
 import {argv} from "yargs";
 import Benchmarker from "./Benchmarker";
 import SysbenchCpuBenchmark from "./benchmarks/SysbenchCpuBenchmark";
+import SysbenchIOBenchmark from "./benchmarks/SysbenchIOBenchmark";
+import SysbenchMemoryBenchmark from "./benchmarks/SysbenchMemoryBenchmark";
 import {IBenchmark, IBenchmarkResult} from "./IBenchmark";
 import {IStorage} from "./IStorage";
 import ProviderFactory from "./ProviderFactory";
 import {IHetznerServerOptions} from "./providers/Hetzner";
 import MdsStorage from "./storages/MdsStorage";
-import SysbenchIOBenchmark from "./benchmarks/SysbenchIOBenchmark";
-import SysbenchMemoryBenchmark from "./benchmarks/SysbenchMemoryBenchmark";
 
 if (!argv.provider) {
     throw new Error(`Provider does not specified. Please specify ` +
