@@ -32,7 +32,7 @@ export default class Benchmarker<T extends IServerOptions> {
         let cpuRating = 0;
         let memoryRating = 0;
         let fileioRating = 0;
-        const networkRating = 800;
+        const networkRating = 500;
         const oltpRating = 1000;
 
         for (const benchmarkResult of results) {
@@ -60,15 +60,18 @@ export default class Benchmarker<T extends IServerOptions> {
             }
         }
 
-        const diskSpaceRating = Math.floor(500 * results[0].env.volumeSize / 20);
-        const memorySizeRating = Math.floor(500 * results[0].env.memory);
-        const transferRating = Math.floor(200 * results[0].env.transfer / 5);
+        const diskSpaceFactor = Math.log(results[0].env.volumeSize / 10) || 0;
+        const memorySizeFactor = Math.log(results[0].env.memory * 1.5) || 0;
+        let transferFactor = results[0].env.transfer ? Math.log(results[0].env.transfer * 2) : 0;
+        if (transferFactor === -Infinity) {
+            transferFactor = 0;
+        }
 
-        return cpuRating +
-            fileioRating + diskSpaceRating +
-            memoryRating + memorySizeRating +
-            networkRating + transferRating +
-            oltpRating;
+        return Math.round(cpuRating +
+            fileioRating * diskSpaceFactor +
+            memoryRating * memorySizeFactor +
+            networkRating + 200 * transferFactor +
+            oltpRating);
     }
 
     private readonly provider: IProvider<T>;
