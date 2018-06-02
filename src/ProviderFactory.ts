@@ -1,6 +1,7 @@
 import {IProvider, IServerOptions} from "./IProvider";
 import {DigitalOcean} from "./providers/DigitalOcean";
 import {Hetzner} from "./providers/Hetzner";
+import {Linode} from "./providers/Linode";
 
 const config = require("../config.json");
 
@@ -10,14 +11,21 @@ export default class ProviderFactory {
     constructor() {
         this.providerCreators.set("hetzner", () => {
             return new Hetzner({
-                apiToken: config.providers.hetzner.settings.apiToken,
-                sshKey: config.providers.hetzner.settings.sshKey,
+                apiToken:       config.providers.hetzner.settings.apiToken,
+                sshKey:         config.providers.hetzner.settings.sshKey,
             });
         });
         this.providerCreators.set("digitalocean", () => {
             return new DigitalOcean({
-                apiToken: config.providers.digitalocean.settings.apiToken,
-                sshKey: config.providers.digitalocean.settings.sshKey,
+                apiToken:       config.providers.digitalocean.settings.apiToken,
+                sshKey:         config.providers.digitalocean.settings.sshKey,
+            });
+        });
+        this.providerCreators.set("linode", () => {
+            return new Linode({
+                apiToken:       config.providers.linode.settings.apiToken,
+                rootPassword:   config.providers.linode.settings.rootPassword,
+                sshKey:         config.providers.linode.settings.sshKey,
             });
         });
     }
