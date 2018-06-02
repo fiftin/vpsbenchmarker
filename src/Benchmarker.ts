@@ -7,23 +7,14 @@ const logger = console;
 export default class Benchmarker<T extends IServerOptions> {
     public static calcRating(benchmarkResult: IBenchmarkResult): number {
         let rating: number;
-        switch (benchmarkResult.benchmarkId) {
-            case "sysbench-cpu-1core":
-            case "sysbench-cpu-2cores":
-            case "sysbench-cpu-4cores":
-            case "sysbench-cpu-8cores":
-                rating = 500 * benchmarkResult.metrics.get("totalNumberOfEvents") / 40000;
-                break;
-            case "sysbench-fileio-10g":
-            case "sysbench-fileio-20g":
-            case "sysbench-fileio-40g":
-                rating = 500 * benchmarkResult.metrics.get("totalNumberOfEvents") / 400000;
-                break;
-            case "sysbench-memory":
-                rating = 500 * benchmarkResult.metrics.get("totalNumberOfEvents") / 90000000;
-                break;
-            default:
-                throw new Error(`Unknown benchmark ${benchmarkResult.benchmarkId}`);
+        if (benchmarkResult.benchmarkId.startsWith("sysbench-cpu-")) {
+            rating = 500 * benchmarkResult.metrics.get("totalNumberOfEvents") / 40000;
+        } else if (benchmarkResult.benchmarkId.startsWith("sysbench-fileio-")) {
+            rating = 500 * benchmarkResult.metrics.get("totalNumberOfEvents") / 400000;
+        } else if (benchmarkResult.benchmarkId === "sysbench-memory") {
+            rating = 500 * benchmarkResult.metrics.get("totalNumberOfEvents") / 90000000;
+        } else {
+            throw new Error(`Unknown benchmark ${benchmarkResult.benchmarkId}`);
         }
         return Math.floor(rating);
     }
@@ -36,27 +27,18 @@ export default class Benchmarker<T extends IServerOptions> {
         const oltpRating = 1000;
 
         for (const benchmarkResult of results) {
-            switch (benchmarkResult.benchmarkId) {
-                case "sysbench-cpu-1core":
-                case "sysbench-cpu-2cores":
-                case "sysbench-cpu-4cores":
-                case "sysbench-cpu-8cores":
-                    if (!cpuRating) {
-                        cpuRating = benchmarkResult.rating;
-                    }
-                    break;
-                case "sysbench-fileio-10g":
-                case "sysbench-fileio-20g":
-                case "sysbench-fileio-40g":
-                    if (!fileioRating) {
-                        fileioRating = benchmarkResult.rating;
-                    }
-                    break;
-                case "sysbench-memory":
-                    if (!memoryRating) {
-                        memoryRating = benchmarkResult.rating;
-                    }
-                    break;
+            if (benchmarkResult.benchmarkId.startsWith("sysbench-cpu-")) {
+                if (!cpuRating) {
+                    cpuRating = benchmarkResult.rating;
+                }
+            } else if (benchmarkResult.benchmarkId.startsWith("sysbench-fileio-")) {
+                if (!fileioRating) {
+                    fileioRating = benchmarkResult.rating;
+                }
+            } else if (benchmarkResult.benchmarkId === "sysbench-memory") {
+                if (!memoryRating) {
+                    memoryRating = benchmarkResult.rating;
+                }
             }
         }
 

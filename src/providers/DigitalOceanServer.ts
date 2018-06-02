@@ -12,13 +12,12 @@ interface IRegion {
 }
 
 function getRegion(slug: string): IRegion {
-    switch (slug) {
-        case "nyc1":
+    switch (slug) {        case "nyc1":
         case "nyc2":
         case "nyc3":
             return {
                 city: "New York",
-                country: "US",
+                country: "us",
                 location: "40.7128,-74.0060",
             };
         case "sgp1":
@@ -26,7 +25,7 @@ function getRegion(slug: string): IRegion {
         case "sgp3":
             return {
                 city: "Singapore",
-                country: "SG",
+                country: "sg",
                 location: "1.3521,103.8198",
             };
         case "lon1":
@@ -34,7 +33,7 @@ function getRegion(slug: string): IRegion {
         case "lon3":
             return {
                 city: "London",
-                country: "GB",
+                country: "uk",
                 location: "51.5074,0.1278",
             };
         case "ams1":
@@ -42,7 +41,7 @@ function getRegion(slug: string): IRegion {
         case "ams3":
             return {
                 city: "Amsterdam",
-                country: "NL",
+                country: "nl",
                 location: "52.3702,4.8952",
             };
         case "fra1":
@@ -50,7 +49,7 @@ function getRegion(slug: string): IRegion {
         case "fra3":
             return {
                 city: "Frankfurt",
-                country: "DE",
+                country: "de",
                 location: "50.1109,8.6821",
             };
         case "tor1":
@@ -58,7 +57,7 @@ function getRegion(slug: string): IRegion {
         case "tor3":
             return {
                 city: "Toronto",
-                country: "CA",
+                country: "ca",
                 location: "43.6532,-79.3832",
             };
         case "sfo1":
@@ -66,7 +65,7 @@ function getRegion(slug: string): IRegion {
         case "sfo3":
             return {
                 city: "San Francisco",
-                country: "CA",
+                country: "us",
                 location: "37.7749,-122.4194",
             };
         case "blr1":
@@ -74,7 +73,7 @@ function getRegion(slug: string): IRegion {
         case "blr3":
             return {
                 city: "Bangalore",
-                country: "IN",
+                country: "in",
                 location: "12.9716,77.5946",
             };
         default:
@@ -100,7 +99,7 @@ export default class DigitalOceanServer implements IServer {
     }
 
     public async getInfo(): Promise<IServerInfo> {
-        const size = this.sizes.find((s) => s.slag === this.serverInfo.size_slug);
+        const size = this.sizes.find((s) => s.slug === this.serverInfo.size_slug);
 
         return {
             city: getRegion(this.serverInfo.region.slug).city,
