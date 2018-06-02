@@ -1,51 +1,385 @@
 {
   "benchmarks": {
     "sysbench-cpu-1core": {
-      "type": "SysbenchCpuBenchmark",
-      "threads": 1
+      "type": "sysbench",
+      "test": "cpu",
+      "num-threads": 2,
+      "max-requests": -1,
+      "max-time": 60
     },
+
     "sysbench-cpu-2cores": {
-      "type": "SysbenchCpuBenchmark",
-      "threads": 2
+      "type": "sysbench",
+      "test": "cpu",
+      "num-threads": 3,
+      "max-requests": -1,
+      "max-time": 60
+    },
+
+    "sysbench-cpu-3cores": {
+      "type": "sysbench",
+      "test": "cpu",
+      "num-threads": 4,
+      "max-requests": -1,
+      "max-time": 60
+    },
+
+    "sysbench-cpu-4cores": {
+      "type": "sysbench",
+      "test": "cpu",
+      "num-threads": 5,
+      "max-requests": -1,
+      "max-time": 60
+    },
+
+    "sysbench-cpu-8cores": {
+      "type": "sysbench",
+      "test": "cpu",
+      "num-threads": 12,
+      "max-requests": -1,
+      "max-time": 60
+    },
+
+    "sysbench-fileio-10g": {
+      "type": "sysbench",
+      "test": "fileio",
+      "num-threads": 6,
+      "file-total-size": "10G",
+      "file-test-mode": "rndrw",
+      "max-requests": -1,
+      "max-time": 60
+    },
+
+    "sysbench-fileio-20g": {
+      "type": "sysbench",
+      "test": "fileio",
+      "num-threads": 8,
+      "file-total-size": "20G",
+      "file-test-mode": "rndrw",
+      "max-requests": -1,
+      "max-time": 60
+    },
+
+    "sysbench-fileio-40g": {
+      "type": "sysbench",
+      "test": "fileio",
+      "num-threads": 12,
+      "file-total-size": "40G",
+      "file-test-mode": "rndrw",
+      "max-requests": -1,
+      "max-time": 60
+    },
+
+    "sysbench-fileio-80g": {
+      "type": "sysbench",
+      "test": "fileio",
+      "num-threads": 14,
+      "file-total-size": "40G",
+      "file-test-mode": "rndrw",
+      "max-requests": -1,
+      "max-time": 60
+    },
+
+    "sysbench-memory": {
+      "type": "sysbench",
+      "test": "memory",
+      "num-threads": 2,
+      "max-requests": -1,
+      "max-time": 60
     }
   },
 
   "storage": {
     "type": "MdsStorage",
-    "clientId": "<your-app-id-on-mydataspace>",
-    "root": "<your-root-name>",
-    "accessToken": "<your-access-token-on-mydataspace>",
-    "path": "data"
+    "clientId": "",
+    "accessToken": "",
+    "root": "your-root-for-results",
+    "path": "results"
   },
 
   "providers": {
-    "hetzner": {
+    "digitalocean": {
       "settings": {
-        "apiToken": "<your-hetzner-api-token>",
-        "sshKey": "<your-ssh-key-name-on-hetzner>",
-        "privateKey": "/home/your-user-name/.ssh/id_rsa"
+        "apiToken": "",
+        "sshKey": "your-ssh-key-id",
+        "privateKey": "C:\\Users\\user\\.ssh\\id_rsa"
       },
       "servers": {
-        "cx11-nbg1": {
+
+        "digitalocean-512mb-nyc1": {
+          "name": "512mb-nyc1",
+          "type": "512mb",
+          "image": "ubuntu-16-04-x64",
+          "location": "nyc3"
+        },
+
+        "digitalocean-1gb-nyc1": {
+          "name": "1gb-nyc1",
+          "type": "1gb",
+          "image": "ubuntu-16-04-x64",
+          "location": "nyc3"
+        },
+
+        "digitalocean-s-1vcpu-1gb-nyc1": {
+          "name": "s-1vcpu-1gb-nyc1",
+          "type": "s-1vcpu-1gb",
+          "image": "ubuntu-16-04-x64",
+          "location": "nyc1"
+        },
+
+        "digitalocean-s-1vcpu-2gb-nyc1": {
+          "name": "s-1vcpu-2gb-nyc1",
+          "type": "s-1vcpu-2gb",
+          "image": "ubuntu-16-04-x64",
+          "location": "nyc1"
+        },
+
+        "digitalocean-s-2vcpu-2gb-nyc1": {
+          "name": "s-2vcpu-2gb-nyc1",
+          "type": "s-2vcpu-2gb",
+          "image": "ubuntu-16-04-x64",
+          "location": "nyc1"
+        },
+
+        "digitalocean-s-1vcpu-3gb-nyc1": {
+          "name": "s-1vcpu-3gb-nyc1",
+          "type": "s-1vcpu-3gb",
+          "image": "ubuntu-16-04-x64",
+          "location": "nyc1"
+        },
+
+        "digitalocean-s-3vcpu-1gb-nyc1": {
+          "name": "s-3vcpu-1gb-nyc1",
+          "type": "s-1vcpu-3gb",
+          "image": "ubuntu-16-04-x64",
+          "location": "nyc1"
+        },
+
+
+
+        "digitalocean-s-4vcpu-8gb-nyc1": {
+          "name": "s-4vcpu-8gb-nyc1",
+          "type": "s-4vcpu-8gb",
+          "image": "ubuntu-16-04-x64",
+          "location": "nyc1"
+        }
+
+      },
+      "benchmarks": [
+
+        { "benchmark": "sysbench-cpu-1core" , "server": "digitalocean-512mb-nyc1" },
+        { "benchmark": "sysbench-fileio-10g", "server": "digitalocean-512mb-nyc1" },
+        { "benchmark": "sysbench-memory"    , "server": "digitalocean-512mb-nyc1" },
+
+
+        { "benchmark": "sysbench-cpu-1core" , "server": "digitalocean-1gb-nyc1" },
+        { "benchmark": "sysbench-fileio-20g", "server": "digitalocean-1gb-nyc1" },
+        { "benchmark": "sysbench-memory"    , "server": "digitalocean-1gb-nyc1" },
+
+
+
+        { "benchmark": "sysbench-cpu-1core" , "server": "digitalocean-s-1vcpu-1gb-nyc1" },
+        { "benchmark": "sysbench-fileio-10g", "server": "digitalocean-s-1vcpu-1gb-nyc1" },
+        { "benchmark": "sysbench-memory"    , "server": "digitalocean-s-1vcpu-1gb-nyc1" },
+
+
+        { "benchmark": "sysbench-cpu-2cores", "server": "digitalocean-s-1vcpu-2gb-nyc1" },
+        { "benchmark": "sysbench-fileio-20g", "server": "digitalocean-s-1vcpu-2gb-nyc1" },
+        { "benchmark": "sysbench-memory"    , "server": "digitalocean-s-1vcpu-2gb-nyc1" },
+
+        { "benchmark": "sysbench-cpu-2cores", "server": "digitalocean-s-2vcpu-2gb-nyc1" },
+        { "benchmark": "sysbench-fileio-20g", "server": "digitalocean-s-2vcpu-2gb-nyc1" },
+        { "benchmark": "sysbench-memory"    , "server": "digitalocean-s-2vcpu-2gb-nyc1" },
+
+
+        { "benchmark": "sysbench-cpu-3cores", "server": "digitalocean-s-3vcpu-1gb-nyc1" },
+        { "benchmark": "sysbench-fileio-20g", "server": "digitalocean-s-3vcpu-1gb-nyc1" },
+        { "benchmark": "sysbench-memory"    , "server": "digitalocean-s-3vcpu-1gb-nyc1" },
+
+
+        { "benchmark": "sysbench-cpu-4cores", "server": "digitalocean-s-4vcpu-8gb-nyc1" },
+        { "benchmark": "sysbench-fileio-80g", "server": "digitalocean-s-4vcpu-8gb-nyc1" },
+        { "benchmark": "sysbench-memory"    , "server": "digitalocean-s-4vcpu-8gb-nyc1" }
+
+      ]
+    },
+
+    "hetzner": {
+      "settings": {
+        "apiToken": "",
+        "sshKey": "your-ssh-key-name",
+        "privateKey": "C:\\Users\\user\\.ssh\\id_rsa"
+      },
+      "servers": {
+        "hetzner-cx11-nbg1": {
           "name": "cx11-ubuntu-16.04",
           "type": "cx11",
           "image": "ubuntu-16.04",
           "location": "nbg1"
         },
-        "cx21-nbg1": {
+        "hetzner-cx11-ceph-nbg1": {
+          "name": "cx21-ceph-ubuntu-16.04",
+          "type": "cx11-ceph",
+          "image": "ubuntu-16.04",
+          "location": "nbg1"
+        },
+        "hetzner-cx21-nbg1": {
           "name": "cx21-ubuntu-16.04",
           "type": "cx21",
           "image": "ubuntu-16.04",
           "location": "nbg1"
+        },
+        "hetzner-cx21-ceph-nbg1": {
+          "name": "cx21-ceph-ubuntu-16.04",
+          "type": "cx21-ceph",
+          "image": "ubuntu-16.04",
+          "location": "nbg1"
+        },
+        "hetzner-cx31-nbg1": {
+          "name": "cx31-ubuntu-16.04",
+          "type": "cx31",
+          "image": "ubuntu-16.04",
+          "location": "nbg1"
+        },
+        "hetzner-cx31-ceph-nbg1": {
+          "name": "cx31-ceph-ubuntu-16.04",
+          "type": "cx31-ceph",
+          "image": "ubuntu-16.04",
+          "location": "nbg1"
+        },
+
+        "hetzner-cx41-nbg1": {
+          "name": "cx41-ubuntu-16.04",
+          "type": "cx41",
+          "image": "ubuntu-16.04",
+          "location": "nbg1"
+        },
+        "hetzner-cx41-ceph-nbg1": {
+          "name": "cx41-ceph-ubuntu-16.04",
+          "type": "cx41-ceph",
+          "image": "ubuntu-16.04",
+          "location": "nbg1"
+        },
+
+        "hetzner-cx51-nbg1": {
+          "name": "cx51-ubuntu-16.04",
+          "type": "cx51",
+          "image": "ubuntu-16.04",
+          "location": "nbg1"
+        },
+        "hetzner-cx51-ceph-nbg1": {
+          "name": "cx51-ceph-ubuntu-16.04",
+          "type": "cx51-ceph",
+          "image": "ubuntu-16.04",
+          "location": "nbg1"
         }
       },
-      "benchmarks": {
-        "sysbench-cpu-1core": {
-          "server": "cx11-nbg1"
+
+
+      "benchmarks": [
+        { "benchmark": "sysbench-cpu-8cores", "server": "hetzner-cx51-nbg1" },
+        { "benchmark": "sysbench-memory"    , "server": "hetzner-cx51-nbg1" },
+        { "benchmark": "sysbench-fileio-80g", "server": "hetzner-cx51-nbg1" },
+
+        { "benchmark": "sysbench-cpu-8cores", "server": "hetzner-cx51-ceph-nbg1" },
+        { "benchmark": "sysbench-memory"    , "server": "hetzner-cx51-ceph-nbg1" },
+        { "benchmark": "sysbench-fileio-80g", "server": "hetzner-cx51-ceph-nbg1" },
+
+
+
+
+        { "benchmark": "sysbench-cpu-4cores", "server": "hetzner-cx41-nbg1" },
+        { "benchmark": "sysbench-fileio-80g", "server": "hetzner-cx41-nbg1" },
+        { "benchmark": "sysbench-memory"    , "server": "hetzner-cx41-nbg1" },
+
+        { "benchmark": "sysbench-cpu-4cores", "server": "hetzner-cx41-ceph-nbg1" },
+        { "benchmark": "sysbench-fileio-80g", "server": "hetzner-cx41-ceph-nbg1" },
+        { "benchmark": "sysbench-memory"    , "server": "hetzner-cx41-ceph-nbg1" },
+
+
+
+
+
+        { "benchmark": "sysbench-cpu-2cores", "server": "hetzner-cx31-nbg1" },
+        { "benchmark": "sysbench-fileio-40g", "server": "hetzner-cx31-nbg1" },
+        { "benchmark": "sysbench-memory"    , "server": "hetzner-cx31-nbg1" },
+
+
+        { "benchmark": "sysbench-cpu-2cores", "server": "hetzner-cx31-ceph-nbg1" },
+        { "benchmark": "sysbench-fileio-40g", "server": "hetzner-cx31-ceph-nbg1" },
+        { "benchmark": "sysbench-memory"    , "server": "hetzner-cx31-ceph-nbg1" },
+
+
+
+
+
+        { "benchmark": "sysbench-cpu-2cores", "server": "hetzner-cx21-nbg1" },
+        { "benchmark": "sysbench-fileio-20g", "server": "hetzner-cx21-nbg1" },
+        { "benchmark": "sysbench-memory"    , "server": "hetzner-cx21-nbg1" },
+
+
+        { "benchmark": "sysbench-cpu-2cores", "server": "hetzner-cx21-ceph-nbg1" },
+        { "benchmark": "sysbench-fileio-20g", "server": "hetzner-cx21-ceph-nbg1" },
+        { "benchmark": "sysbench-memory"    , "server": "hetzner-cx21-ceph-nbg1" },
+
+
+
+
+
+        { "benchmark": "sysbench-cpu-1core" , "server": "hetzner-cx11-nbg1" },
+        { "benchmark": "sysbench-fileio-10g", "server": "hetzner-cx11-nbg1" },
+        { "benchmark": "sysbench-memory"    , "server": "hetzner-cx11-nbg1" },
+
+
+        { "benchmark": "sysbench-cpu-1core" , "server": "hetzner-cx11-ceph-nbg1" },
+        { "benchmark": "sysbench-fileio-10g", "server": "hetzner-cx11-ceph-nbg1" },
+        { "benchmark": "sysbench-memory"    , "server": "hetzner-cx11-ceph-nbg1" }
+      ]
+    },
+
+    "linode": {
+      "settings": {
+        "apiToken": "",
+        "sshKey": "C:\\Users\\user\\.ssh\\id_rsa.pub",
+        "privateKey": "C:\\Users\\user\\.ssh\\id_rsa",
+        "rootPassword": "test"
+      },
+      "servers": {
+        "linode-g6-standard-1-us-east": {
+          "name": "g6-standard-1-us-east",
+          "type": "g6-standard-1",
+          "image": "linode/ubuntu16.04lts",
+          "location": "us-east"
         },
-        "sysbench-cpu-2cores": {
-          "server": "cx21-nbg1"
+        "linode-g6-nanode-1-us-east": {
+          "name": "g6-nanode-1-us-east",
+          "type": "g6-nanode-1",
+          "image": "linode/ubuntu16.04lts",
+          "location": "us-east"
         }
+      },
+      "benchmarks": [
+        { "benchmark": "sysbench-cpu-1core" , "server": "linode-g6-nanode-1-us-east" },
+        { "benchmark": "sysbench-fileio-10g", "server": "linode-g6-nanode-1-us-east" },
+        { "benchmark": "sysbench-memory"    , "server": "linode-g6-nanode-1-us-east" },
+
+
+        { "benchmark": "sysbench-cpu-1core" , "server": "linode-g6-standard-1-us-east" },
+        { "benchmark": "sysbench-fileio-20g", "server": "linode-g6-standard-1-us-east" },
+        { "benchmark": "sysbench-memory"    , "server": "linode-g6-standard-1-us-east" },
+
+
+        { "benchmark": "sysbench-cpu-2core" , "server": "linode-g6-standard-2-us-east" },
+        { "benchmark": "sysbench-fileio-40g", "server": "linode-g6-standard-2-us-east" },
+        { "benchmark": "sysbench-memory"    , "server": "linode-g6-standard-2-us-east" }
+      ]
+    },
+
+    "vultr": {
+      "settings": {
+        "apiKey": "",
+        "sshKey": "your-ssh-key-name",
+        "privateKey": "C:\\Users\\user\\.ssh\\id_rsa"
       }
     }
   }
