@@ -8,8 +8,10 @@ const logger = console;
 export default class LinodeServer implements IServer {
     private readonly serverInfo: any;
     private readonly clientOptions: ISshClientOptions;
+    private readonly id: string;
 
-    public constructor(serverInfo: any, clientOptions: ISshClientOptions) {
+    public constructor(id: string, serverInfo: any, clientOptions: ISshClientOptions) {
+        this.id = id;
         this.serverInfo = serverInfo;
         this.clientOptions = clientOptions;
 
@@ -35,7 +37,7 @@ export default class LinodeServer implements IServer {
             city: "",
             cores: this.serverInfo.specs.vcpus,
             country: "",
-            id: this.serverInfo.id,
+            id: this.id,
             location: "",
             memory: Math.round(this.serverInfo.specs.memory / 1024),
             os: `${os}`,

@@ -76,7 +76,7 @@ export class Linode implements IProvider<ILinodeServerOptions> {
             }
         }
 
-        return new LinodeServer(serverInfo, {
+        return new LinodeServer(options.id, serverInfo, {
             host: serverInfo.ipv4[0],
             privateKey: options.privateKey,
             username: "root",
