@@ -2,6 +2,7 @@ import {IProvider, IServerOptions} from "../IProvider";
 import {IServer} from "../IServer";
 import {readFile} from "fs";
 import LinodeServer from "./LinodeServer";
+import HetznerServer from "./HetznerServer";
 
 const requestPromise = require("request-promise-native");
 
@@ -26,7 +27,7 @@ export class Linode implements IProvider<ILinodeServerOptions> {
     }
 
     public async createServer(options: ILinodeServerOptions): Promise<IServer> {
-        const key = new Promise(((resolve, reject) => {
+        const key = await new Promise<string>(((resolve, reject) => {
             readFile(this.settings.sshKey, (err, data) => {
                 if (err) {
                     reject(err);
@@ -39,12 +40,12 @@ export class Linode implements IProvider<ILinodeServerOptions> {
         let serverInfo = (await requestPromise({
             body: {
                 authorized_keys: [
-                    key,
+                    key.trim(),
                 ],
                 booted: true,
                 group: "Linode-Group",
                 image: options.image,
-                label: ``,
+                label: options.name,
                 region: options.location,
                 root_pass: this.settings.rootPassword,
                 type: options.type,
@@ -75,10 +76,29 @@ export class Linode implements IProvider<ILinodeServerOptions> {
             }
         }
 
-        return new LinodeServer(options, serverInfo);
+        return new LinodeServer(serverInfo, {
+            host: serverInfo.ipv4[0],
+            privateKey: options.privateKey,
+            username: "root",
+        });
     }
 
     public async destroyServer(server: IServer): Promise<void> {
-        return undefined;
+        const linodeServer = server as HetznerServer;
+        const result = await requestPromise({
+            headers: {
+                Authorization: `Bearer ${this.settings.apiToken}`,
+            },
+            json: true,
+            method: "DELETE",
+            uri: `https://api.linode.com/v4/linode/instances/${linodeServer.serverInfo.id}`,
+        });
+        const errors = result.errors;
+        if (errors) {
+            const error = errors[0];
+            throw new Error(`Error ${error.field} during deleting ` +
+                `server ${linodeServer.serverInfo.id}: ${error.reason}`);
+        }
+        await new Promise((resolve) => setTimeout(resolve, 5000));
     }
 }

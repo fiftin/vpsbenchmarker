@@ -70,8 +70,6 @@ function getProviderBenchmarks(providerId: string): Map<string, IBenchmark[]> {
 const logger = console;
 
 (async () => {
-    // const resultsArray: IBenchmarkResult[] = [];
-
     const providerInfo = config.providers[argv.provider];
     const provider = new ProviderFactory().createProvider(argv.provider, providerInfo.settings);
     for (const [serverId, serverBenchmarks] of getProviderBenchmarks(argv.provider)) {
@@ -84,11 +82,8 @@ const logger = console;
             privateKey: providerInfo.settings.privateKey,
             type: providerInfo.servers[serverId].type,
         });
-        // resultsArray.push(...serverResults);
         await storage.store(argv.provider, serverResults);
     }
-
-    // await storage.store(argv.provider, resultsArray);
 })().then(() => {
     process.exit();
 }, (err) => {
