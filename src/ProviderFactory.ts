@@ -38,7 +38,7 @@ export default class ProviderFactory {
         });
     }
 
-    public createProvider<T extends IServerOptions>(name: string, options: T): IProvider<T> {
+    public createProvider(name: string, options: IServerOptions): IProvider {
         const creator = this.providerCreators.get(name);
         if (creator == null) {
             throw new Error(`Provider ${name} does not exists`);

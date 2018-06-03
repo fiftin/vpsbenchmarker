@@ -1,8 +1,5 @@
 import {IServer, IServerInfo} from "../IServer";
 import {ISshClientOptions, SshClient} from "../SshClient";
-
-const requestPromise = require("request-promise-native");
-
 const logger = console;
 
 interface IRegion {

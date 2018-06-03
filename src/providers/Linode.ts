@@ -1,8 +1,8 @@
+import {readFile} from "fs";
 import {IProvider, IServerOptions} from "../IProvider";
 import {IServer} from "../IServer";
-import {readFile} from "fs";
-import LinodeServer from "./LinodeServer";
 import HetznerServer from "./HetznerServer";
+import LinodeServer from "./LinodeServer";
 
 const requestPromise = require("request-promise-native");
 
@@ -12,21 +12,13 @@ export interface ILinodeSettings {
     rootPassword: string;
 }
 
-export interface ILinodeServerOptions extends IServerOptions {
-    name: string;
-    image: string;
-    type: string;
-    privateKey: string;
-    location: string;
-}
-
-export class Linode implements IProvider<ILinodeServerOptions> {
+export class Linode implements IProvider {
     private readonly settings: ILinodeSettings;
     constructor(settings: ILinodeSettings) {
         this.settings = settings;
     }
 
-    public async createServer(options: ILinodeServerOptions): Promise<IServer> {
+    public async createServer(options: IServerOptions): Promise<IServer> {
         const key = await new Promise<string>(((resolve, reject) => {
             readFile(this.settings.sshKey, (err, data) => {
                 if (err) {

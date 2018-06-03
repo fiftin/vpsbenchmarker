@@ -1,9 +1,9 @@
 import {Lightsail} from "aws-sdk";
+import {AWSError} from "aws-sdk/lib/error";
+import {PromiseResult, Request} from "aws-sdk/lib/request";
 import {IProvider, IServerOptions} from "../IProvider";
 import {IServer} from "../IServer";
 import AmazonLightsailServer from "./AmazonLightsailServer";
-import {PromiseResult, Request} from "aws-sdk/lib/request";
-import {AWSError} from "aws-sdk/lib/error";
 
 const requestPromise = require("request-promise-native");
 
@@ -13,23 +13,14 @@ export interface ILightsailSettings {
     sshKey: string;
 }
 
-export interface ILightsailServerOptions extends IServerOptions {
-    name: string;
-    image: string;
-    type: string;
-    privateKey: string;
-    location: string;
-    username: string;
-}
-
-export class AmazonLightsail implements IProvider<ILightsailServerOptions> {
+export class AmazonLightsail implements IProvider {
     private readonly settings: ILightsailSettings;
     public constructor(settings: ILightsailSettings) {
         this.settings = settings;
 
     }
 
-    public async createServer(options: ILightsailServerOptions): Promise<IServer> {
+    public async createServer(options: IServerOptions): Promise<IServer> {
         const lightsail = new Lightsail({
             accessKeyId: this.settings.accessKeyId,
             region: options.location,

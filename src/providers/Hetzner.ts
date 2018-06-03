@@ -9,21 +9,13 @@ export interface IHetznerSettings {
     sshKey: string;
 }
 
-export interface IHetznerServerOptions extends IServerOptions {
-    name: string;
-    image: string;
-    type: string;
-    privateKey: string;
-    location: string;
-}
-
-export class Hetzner implements IProvider<IHetznerServerOptions> {
+export class Hetzner implements IProvider {
     private readonly settings: IHetznerSettings;
     constructor(settings: IHetznerSettings) {
         this.settings = settings;
     }
 
-    public async createServer(options: IHetznerServerOptions): Promise<IServer> {
+    public async createServer(options: IServerOptions): Promise<IServer> {
         const serverInfo = await requestPromise({
             body: {
                 image: options.image,

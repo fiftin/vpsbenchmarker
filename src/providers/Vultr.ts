@@ -1,17 +1,17 @@
 import {IProvider, IServerOptions} from "../IProvider";
 import {IServer} from "../IServer";
-import DigitalOceanServer from "./DigitalOceanServer";
+import VultrServer from "./VultrServer";
 
 const requestPromise = require("request-promise-native");
 
-export interface IDigitalOceanSettings {
+export interface IVultrSettings {
     apiToken: string;
     sshKey: string;
 }
 
-export class DigitalOcean implements IProvider {
-    private readonly settings: IDigitalOceanSettings;
-    constructor(settings: IDigitalOceanSettings) {
+export class Vultr implements IProvider {
+    private readonly settings: IVultrSettings;
+    constructor(settings: IVultrSettings) {
         this.settings = settings;
     }
 
@@ -68,7 +68,7 @@ export class DigitalOcean implements IProvider {
             uri: "https://api.digitalocean.com/v2/sizes",
         })).sizes;
 
-        return new DigitalOceanServer(options.id, serverInfo, sizes, {
+        return new VultrServer(options.id, serverInfo, {
             host: serverInfo.networks.v4[0].ip_address,
             privateKey: options.privateKey,
             username: "root",
@@ -76,7 +76,7 @@ export class DigitalOcean implements IProvider {
     }
 
     public async destroyServer(server: IServer): Promise<void> {
-        const hetznerServer = server as DigitalOceanServer;
+        const vultrServer = server as VultrServer;
         await requestPromise({
             headers: {
                 "Authorization": `Bearer ${this.settings.apiToken}`,
@@ -84,7 +84,7 @@ export class DigitalOcean implements IProvider {
             },
             json: true,
             method: "DELETE",
-            uri: `https://api.digitalocean.com/v2/droplets/${hetznerServer.serverInfo.id}`,
+            uri: `https://api.digitalocean.com/v2/droplets/${vultrServer.id}`,
         });
         await new Promise((resolve) => setTimeout(resolve, 5000));
     }

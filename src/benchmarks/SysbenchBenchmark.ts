@@ -16,6 +16,9 @@ export default abstract class SysbenchBenchmark implements IBenchmark {
     protected getArgsString(): string {
         const args = [];
         for (const arg in this.options) {
+            if (!this.options.hasOwnProperty(arg)) {
+                continue;
+            }
             if (IGNORED_ARGS.indexOf(arg) >= 0) {
                 continue;
             }

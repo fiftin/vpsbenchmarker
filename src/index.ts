@@ -3,10 +3,9 @@ import Benchmarker from "./Benchmarker";
 import SysbenchCpuBenchmark from "./benchmarks/SysbenchCpuBenchmark";
 import SysbenchIOBenchmark from "./benchmarks/SysbenchIOBenchmark";
 import SysbenchMemoryBenchmark from "./benchmarks/SysbenchMemoryBenchmark";
-import {IBenchmark, IBenchmarkResult} from "./IBenchmark";
+import {IBenchmark} from "./IBenchmark";
 import {IStorage} from "./IStorage";
 import ProviderFactory from "./ProviderFactory";
-import {IHetznerServerOptions} from "./providers/Hetzner";
 import MdsStorage from "./storages/MdsStorage";
 
 if (!argv.provider) {
@@ -73,7 +72,8 @@ const logger = console;
     const providerInfo = config.providers[argv.provider];
     const provider = new ProviderFactory().createProvider(argv.provider, providerInfo.settings);
     for (const [serverId, serverBenchmarks] of getProviderBenchmarks(argv.provider)) {
-        const benchmarker = new Benchmarker<IHetznerServerOptions>(provider, serverBenchmarks);
+
+        const benchmarker = new Benchmarker(provider, serverBenchmarks);
         const serverResults = await benchmarker.start({
             id: serverId,
             image: providerInfo.servers[serverId].image,
@@ -82,6 +82,7 @@ const logger = console;
             privateKey: providerInfo.settings.privateKey,
             type: providerInfo.servers[serverId].type,
         });
+
         await storage.store(argv.provider, serverResults);
     }
 })().then(() => {

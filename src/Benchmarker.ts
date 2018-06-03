@@ -4,7 +4,7 @@ import {IProvider, IServerOptions} from "./IProvider";
 
 const logger = console;
 
-export default class Benchmarker<T extends IServerOptions> {
+export default class Benchmarker {
     public static calcRating(benchmarkResult: IBenchmarkResult): number {
         let rating: number;
         if (benchmarkResult.benchmarkId.startsWith("sysbench-cpu-")) {
@@ -56,15 +56,15 @@ export default class Benchmarker<T extends IServerOptions> {
             oltpRating);
     }
 
-    private readonly provider: IProvider<T>;
+    private readonly provider: IProvider;
     private readonly benchmarks: IBenchmark[];
 
-    constructor(provider: IProvider<T>, benchmarks: IBenchmark[]) {
+    constructor(provider: IProvider, benchmarks: IBenchmark[]) {
         this.provider = provider;
         this.benchmarks = benchmarks;
     }
 
-    public async start(options: T): Promise<IBenchmarkResult[]> {
+    public async start(options: IServerOptions): Promise<IBenchmarkResult[]> {
         logger.log(`Creating server "${options.id}"...`);
         const testId = uuid();
         const server = await this.provider.createServer(options);
