@@ -19,6 +19,7 @@
     "@types/request-promise-native": "^1.0.14",
     "@types/ssh2": "^0.5.35",
     "@types/yargs": "^11.0.0",
+    "aws-sdk": "^2.250.1",
     "express": "4.15.3",
     "mydataspace": "^3.0.2",
     "nodemon": "1.11.0",
@@ -29,6 +30,7 @@
     "yargs": "^11.0.0"
   },
   "devDependencies": {
+    "@types/aws-sdk": "^2.7.0",
     "@types/chai": "^4.1.3",
     "@types/mocha": "2.2.41",
     "@types/uuid": "^3.4.3",

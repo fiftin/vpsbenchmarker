@@ -72,4 +72,8 @@ export class SshClient implements IClient {
             });
         });
     }
+
+    public isRoot(): boolean {
+        return this.options.username === "root";
+    }
 }

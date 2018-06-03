@@ -1,4 +1,5 @@
 import {IProvider, IServerOptions} from "./IProvider";
+import {AmazonLightsail} from "./providers/AmazonLightsail";
 import {DigitalOcean} from "./providers/DigitalOcean";
 import {Hetzner} from "./providers/Hetzner";
 import {Linode} from "./providers/Linode";
@@ -9,6 +10,13 @@ export default class ProviderFactory {
     private providerCreators = new Map();
 
     constructor() {
+        this.providerCreators.set("lightsail", () => {
+            return new AmazonLightsail({
+                accessKeyId:    config.providers.lightsail.settings.accessKeyId,
+                secretAccessKey: config.providers.lightsail.settings.secretAccessKey,
+                sshKey:         config.providers.lightsail.settings.sshKey,
+            });
+        });
         this.providerCreators.set("hetzner", () => {
             return new Hetzner({
                 apiToken:       config.providers.hetzner.settings.apiToken,
