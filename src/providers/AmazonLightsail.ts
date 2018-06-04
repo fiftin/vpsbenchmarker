@@ -48,7 +48,7 @@ export class AmazonLightsail implements IProvider {
 
         await new Promise((resolve) => setTimeout(resolve, 60000));
 
-        return new AmazonLightsailServer(options.name, options.location, serverInfo.instance, {
+        return new AmazonLightsailServer(options.id, options.location, serverInfo.instance, {
             host: serverInfo.instance.publicIpAddress,
             privateKey: options.privateKey,
             username: options.username,
@@ -63,9 +63,8 @@ export class AmazonLightsail implements IProvider {
             secretAccessKey: this.settings.secretAccessKey,
         });
 
-        const res = await lightsail.deleteInstance({
-            instanceName: lightsailServer.instanceName,
+        await lightsail.deleteInstance({
+            instanceName: lightsailServer.serverInfo.name,
         }).promise();
-        return undefined;
     }
 }

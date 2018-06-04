@@ -7,6 +7,7 @@ export interface ISshClientOptions {
     host: string;
     username: string;
     privateKey: string;
+    password?: string;
 }
 
 export class SshClient implements IClient {
@@ -33,6 +34,7 @@ export class SshClient implements IClient {
                 resolve();
             }).connect({
                 host: this.options.host,
+                password: this.options.password,
                 privateKey,
                 username: this.options.username,
             });

@@ -5,13 +5,13 @@ import {ISshClientOptions, SshClient} from "../SshClient";
 const logger = console;
 
 export default class AmazonLightsailServer implements IServer {
-    public readonly instanceName: string;
+    public readonly id: string;
     public readonly region: string;
-    private readonly serverInfo: Instance;
+    public readonly serverInfo: Instance;
     private readonly clientOptions: ISshClientOptions;
 
-    public constructor(instanceName: string, region: string, serverInfo: Instance, clientOptions: ISshClientOptions) {
-        this.instanceName = instanceName;
+    public constructor(id: string, region: string, serverInfo: Instance, clientOptions: ISshClientOptions) {
+        this.id = id;
         this.region = region;
         this.serverInfo = serverInfo;
         this.clientOptions = clientOptions;
@@ -24,7 +24,7 @@ export default class AmazonLightsailServer implements IServer {
                 await client.connect();
                 break;
             } catch (e) {
-                logger.log(`Error during connection to server ${this.instanceName}: ${e.message}\nTrying again...`);
+                logger.log(`Error during connection to server ${this.id}: ${e.message}\nTrying again...`);
                 await new Promise((resolve) => setTimeout(resolve, 30000));
             }
         }
@@ -33,17 +33,17 @@ export default class AmazonLightsailServer implements IServer {
 
     public async getInfo(): Promise<IServerInfo> {
         return {
-            city: "",
-            cores: 1,
+            city: this.serverInfo.location.regionName,
+            cores: this.serverInfo.hardware.cpuCount,
             country: "",
-            id: this.instanceName,
+            id: this.id,
             location: "",
-            memory: 0,
+            memory: this.serverInfo.hardware.ramSizeInGb,
             os: ``,
             priceHourly: 0,
             priceMonthly: 0,
-            transfer: 0,
-            volumeSize: 0,
+            transfer: Math.floor(this.serverInfo.networking.monthlyTransfer.gbPerMonthAllocated / 1000),
+            volumeSize: this.serverInfo.hardware.disks[0].sizeInGb,
             volumeType: "ssd",
         };
     }

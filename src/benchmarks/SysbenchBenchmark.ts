@@ -28,10 +28,8 @@ export default abstract class SysbenchBenchmark implements IBenchmark {
     }
 
     protected async prepare(client: IClient): Promise<void> {
-        if (!client.isRoot()) {
-            await client.runCommand("sudo -s");
-        }
-        await client.runCommand("apt update");
-        await client.runCommand("apt install sysbench -y");
+        const prefix = client.isRoot() ? "" : "sudo ";
+        await client.runCommand(`${prefix}apt update`);
+        await client.runCommand(`${prefix}apt install sysbench -y`);
     }
 }

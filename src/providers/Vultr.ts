@@ -11,46 +11,46 @@ export interface IVultrSettings {
 
 export class Vultr implements IProvider {
     private readonly settings: IVultrSettings;
+
     constructor(settings: IVultrSettings) {
         this.settings = settings;
     }
 
     public async createServer(options: IServerOptions): Promise<IServer> {
-        let serverInfo = (await requestPromise({
-            body: {
-                backups: false,
-                image: options.image,
-                ipv6: true,
-                name: options.name,
-                private_networking: null,
-                region: options.location,
-                size: options.type,
-                ssh_keys: [this.settings.sshKey],
-                tags: [],
-                user_data: null,
-                volumes: null,
+        const result = await requestPromise({
+            form: {
+                DCID: options.location,
+                OSID: options.image,
+                SSHKEYID: this.settings.sshKey,
+                VPSPLANID: options.type,
+                label: options.name,
             },
             headers: {
-                "Authorization": `Bearer ${this.settings.apiToken}`,
-                "Content-Type": "application/json",
+                "API-Key": this.settings.apiToken,
             },
             json: true,
             method: "POST",
-            uri: "https://api.digitalocean.com/v2/droplets",
-        })).droplet;
+            uri: "https://api.vultr.com/v1/server/create",
+        });
+
+        const SUBID = result.SUBID;
+
+        let serverInfo;
 
         while (true) {
             await new Promise((resolve) => setTimeout(resolve, 10000));
 
-            serverInfo = (await requestPromise({
+            const servers = (await requestPromise({
                 headers: {
-                    "Authorization": `Bearer ${this.settings.apiToken}`,
-                    "Content-Type": "application/json",
+                    "API-Key": this.settings.apiToken,
                 },
                 json: true,
                 method: "GET",
-                uri: `https://api.digitalocean.com/v2/droplets/${serverInfo.id}`,
-            })).droplet;
+                uri: `https://api.vultr.com/v1/server/list`,
+            }));
+
+            serverInfo = servers[SUBID];
+
             if (serverInfo.status === "active") {
                 break;
             }
@@ -58,18 +58,8 @@ export class Vultr implements IProvider {
 
         await new Promise((resolve) => setTimeout(resolve, 60000));
 
-        const sizes = (await requestPromise({
-            headers: {
-                "Authorization": `Bearer ${this.settings.apiToken}`,
-                "Content-Type": "application/json",
-            },
-            json: true,
-            method: "GET",
-            uri: "https://api.digitalocean.com/v2/sizes",
-        })).sizes;
-
         return new VultrServer(options.id, serverInfo, {
-            host: serverInfo.networks.v4[0].ip_address,
+            host: serverInfo.main_ip,
             privateKey: options.privateKey,
             username: "root",
         });
@@ -78,13 +68,15 @@ export class Vultr implements IProvider {
     public async destroyServer(server: IServer): Promise<void> {
         const vultrServer = server as VultrServer;
         await requestPromise({
+            form: {
+                SUBID: vultrServer.SUBID,
+            },
             headers: {
-                "Authorization": `Bearer ${this.settings.apiToken}`,
-                "Content-Type": "application/json",
+                "API-Key": this.settings.apiToken,
             },
             json: true,
-            method: "DELETE",
-            uri: `https://api.digitalocean.com/v2/droplets/${vultrServer.id}`,
+            method: "POST",
+            uri: `https://api.vultr.com/v1/server/destroy`,
         });
         await new Promise((resolve) => setTimeout(resolve, 5000));
     }

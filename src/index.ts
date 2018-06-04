@@ -81,6 +81,7 @@ const logger = console;
             name: providerInfo.servers[serverId].name,
             privateKey: providerInfo.settings.privateKey,
             type: providerInfo.servers[serverId].type,
+            username: providerInfo.servers[serverId].username,
         });
 
         await storage.store(argv.provider, serverResults);

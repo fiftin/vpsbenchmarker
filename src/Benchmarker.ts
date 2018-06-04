@@ -43,9 +43,14 @@ export default class Benchmarker {
         }
 
         const diskSpaceFactor = Math.log(results[0].env.volumeSize / 10) || 0;
-        const memorySizeFactor = Math.log(results[0].env.memory * 1.5) || 0;
+        let memorySizeFactor = Math.log(results[0].env.memory * 1.5) || 0;
         let transferFactor = results[0].env.transfer ? Math.log(results[0].env.transfer * 2) : 0;
-        if (transferFactor === -Infinity) {
+
+        if (memorySizeFactor === -Infinity || isNaN(memorySizeFactor) || memorySizeFactor < 0) {
+            memorySizeFactor = 0;
+        }
+
+        if (transferFactor === -Infinity || transferFactor < 0) {
             transferFactor = 0;
         }
 

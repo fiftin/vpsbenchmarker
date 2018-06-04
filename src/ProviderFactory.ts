@@ -3,6 +3,7 @@ import {AmazonLightsail} from "./providers/AmazonLightsail";
 import {DigitalOcean} from "./providers/DigitalOcean";
 import {Hetzner} from "./providers/Hetzner";
 import {Linode} from "./providers/Linode";
+import {Vultr} from "./providers/Vultr";
 
 const config = require("../config.json");
 
@@ -34,6 +35,12 @@ export default class ProviderFactory {
                 apiToken:       config.providers.linode.settings.apiToken,
                 rootPassword:   config.providers.linode.settings.rootPassword,
                 sshKey:         config.providers.linode.settings.sshKey,
+            });
+        });
+        this.providerCreators.set("vultr", () => {
+            return new Vultr({
+                apiToken:       config.providers.vultr.settings.apiToken,
+                sshKey:         config.providers.vultr.settings.sshKey,
             });
         });
     }
