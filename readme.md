@@ -24,7 +24,7 @@
 
 ### Configuration
 
-Configuration reads from ```config.json```. Example of configuration you can find in ```config-example.json```.
+Configuration reads from ```config.json```. Example of configuration you can find in [config-example.json](blob/master/config-example.json).
 
 Config contains 3 root sections:
 * ```benchmarks```
