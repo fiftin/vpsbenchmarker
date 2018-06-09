@@ -1,5 +1,5 @@
 ## VPS Benchmarker
-![Logo](https://raw.githubusercontent.com/fiftin/vpsbenchmarker/master/logo-200.png)
+![Logo](https://raw.githubusercontent.com/fiftin/vpsbenchmarker/master/logo-100.png)
 
 ### How it works
 
@@ -10,6 +10,9 @@
 
 ### Supported services
 * [Hetzner](https://hetzner.cloud)
+* [Linode](https://linode.com)
+* [DigitalOcean](https://digitalocean.com)
+* [Amazon Lightsail](https://lightsail.aws.amazon.com)
 
 ### Supported benchmarking tools
 * [sysbench](https://github.com/akopytov/sysbench) &mdash; Scriptable database and system performance benchmark.
@@ -17,7 +20,7 @@
 
 ### How to use
 
-```npm run start --provider=hetzner --benchmarks=sysbench-cpu-1core-2g,sysbench-cpu-2cores-4g```
+```npm run start --provider=hetzner --server=test```
 
 ### Configuration
 
