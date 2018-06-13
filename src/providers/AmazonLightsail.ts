@@ -1,13 +1,13 @@
 import {Lightsail} from "aws-sdk";
 import {AWSError} from "aws-sdk/lib/error";
 import {PromiseResult, Request} from "aws-sdk/lib/request";
-import {IProvider, IServerOptions} from "../IProvider";
+import {IProvider, IProviderSettings, IServerOptions} from "../IProvider";
 import {IServer} from "../IServer";
 import AmazonLightsailServer from "./AmazonLightsailServer";
 
 const requestPromise = require("request-promise-native");
 
-export interface ILightsailSettings {
+export interface ILightsailSettings extends IProviderSettings {
     secretAccessKey: string;
     accessKeyId: string;
     sshKey: string;

@@ -1,5 +1,10 @@
 import {IServer} from "./IServer";
 
+export interface IProviderSettings {
+    name: string;
+    logo: string;
+}
+
 export interface IServerOptions {
     id: string;
     name: string;

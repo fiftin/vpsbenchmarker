@@ -1,10 +1,10 @@
-import HetznerServer from "./HetznerServer";
+import {IProvider, IProviderSettings, IServerOptions} from "../IProvider";
 import {IServer} from "../IServer";
-import {IProvider, IServerOptions} from "../IProvider";
+import HetznerServer from "./HetznerServer";
 
 const requestPromise = require("request-promise-native");
 
-export interface IHetznerSettings {
+export interface IHetznerSettings extends IProviderSettings {
     apiToken: string;
     sshKey: string;
 }

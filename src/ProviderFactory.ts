@@ -14,6 +14,8 @@ export default class ProviderFactory {
         this.providerCreators.set("lightsail", () => {
             return new AmazonLightsail({
                 accessKeyId:    config.providers.lightsail.settings.accessKeyId,
+                logo:           config.provider.lightsail.logo,
+                name:           config.provider.lightsail.name,
                 secretAccessKey: config.providers.lightsail.settings.secretAccessKey,
                 sshKey:         config.providers.lightsail.settings.sshKey,
             });
@@ -21,18 +23,24 @@ export default class ProviderFactory {
         this.providerCreators.set("hetzner", () => {
             return new Hetzner({
                 apiToken:       config.providers.hetzner.settings.apiToken,
+                logo:           config.provider.lightsail.logo,
+                name:           config.provider.lightsail.name,
                 sshKey:         config.providers.hetzner.settings.sshKey,
             });
         });
         this.providerCreators.set("digitalocean", () => {
             return new DigitalOcean({
                 apiToken:       config.providers.digitalocean.settings.apiToken,
+                logo:           config.provider.lightsail.logo,
+                name:           config.provider.lightsail.name,
                 sshKey:         config.providers.digitalocean.settings.sshKey,
             });
         });
         this.providerCreators.set("linode", () => {
             return new Linode({
                 apiToken:       config.providers.linode.settings.apiToken,
+                logo:           config.provider.lightsail.logo,
+                name:           config.provider.lightsail.name,
                 rootPassword:   config.providers.linode.settings.rootPassword,
                 sshKey:         config.providers.linode.settings.sshKey,
             });
@@ -40,6 +48,8 @@ export default class ProviderFactory {
         this.providerCreators.set("vultr", () => {
             return new Vultr({
                 apiToken:       config.providers.vultr.settings.apiToken,
+                logo:           config.provider.lightsail.logo,
+                name:           config.provider.lightsail.name,
                 sshKey:         config.providers.vultr.settings.sshKey,
             });
         });

@@ -22,6 +22,12 @@ const storage: IStorage = new MdsStorage({
     root: config.storage.root,
 });
 
+process.on("unhandledRejection", (reason, promise) => {
+    logger.log("Unhandled Rejection at:", reason.stack || reason);
+    // Recommended: send the information to sentry.io
+    // or whatever crash reporting service you use
+});
+
 function getProviderBenchmarks(providerId: string): Map<string, IBenchmark[]> {
     const providerInfo = config.providers[providerId];
 

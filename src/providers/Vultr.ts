@@ -1,10 +1,10 @@
-import {IProvider, IServerOptions} from "../IProvider";
+import {IProvider, IProviderSettings, IServerOptions} from "../IProvider";
 import {IServer} from "../IServer";
 import VultrServer from "./VultrServer";
 
 const requestPromise = require("request-promise-native");
 
-export interface IVultrSettings {
+export interface IVultrSettings extends IProviderSettings {
     apiToken: string;
     sshKey: string;
 }

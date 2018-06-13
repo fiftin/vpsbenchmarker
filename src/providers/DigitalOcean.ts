@@ -1,10 +1,10 @@
-import {IProvider, IServerOptions} from "../IProvider";
+import {IProvider, IProviderSettings, IServerOptions} from "../IProvider";
 import {IServer} from "../IServer";
 import DigitalOceanServer from "./DigitalOceanServer";
 
 const requestPromise = require("request-promise-native");
 
-export interface IDigitalOceanSettings {
+export interface IDigitalOceanSettings extends IProviderSettings {
     apiToken: string;
     sshKey: string;
 }

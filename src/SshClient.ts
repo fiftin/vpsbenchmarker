@@ -30,6 +30,10 @@ export class SshClient implements IClient {
         }));
         return await new Promise((resolve, reject) => {
             this.conn = new Ssh2Client();
+            this.conn.on("error", (err) => {
+                reject(err);
+            });
+
             this.conn.on("ready", () => {
                 resolve();
             }).connect({

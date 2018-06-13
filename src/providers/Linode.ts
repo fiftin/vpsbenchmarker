@@ -1,12 +1,12 @@
 import {readFile} from "fs";
-import {IProvider, IServerOptions} from "../IProvider";
+import {IProvider, IProviderSettings, IServerOptions} from "../IProvider";
 import {IServer} from "../IServer";
 import HetznerServer from "./HetznerServer";
 import LinodeServer from "./LinodeServer";
 
 const requestPromise = require("request-promise-native");
 
-export interface ILinodeSettings {
+export interface ILinodeSettings extends IProviderSettings {
     apiToken: string;
     sshKey: string;
     rootPassword: string;
