@@ -13,6 +13,7 @@
 * [Linode](https://linode.com)
 * [DigitalOcean](https://digitalocean.com)
 * [Amazon Lightsail](https://lightsail.aws.amazon.com)
+* [Vultr](https://vultr.com)
 
 ### Supported benchmarking tools
 * [sysbench](https://github.com/akopytov/sysbench) &mdash; Scriptable database and system performance benchmark.

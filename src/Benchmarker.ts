@@ -19,6 +19,10 @@ export default class Benchmarker {
         return Math.floor(rating);
     }
 
+    public static calcRatingPerPrice(results: IBenchmarkResult[]): number {
+        return 0;
+    }
+
     public static calcTotalRating(results: IBenchmarkResult[]): number {
         let cpuRating = 0;
         let memoryRating = 0;
