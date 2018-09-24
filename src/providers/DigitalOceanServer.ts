@@ -9,7 +9,8 @@ interface IRegion {
 }
 
 function getRegion(slug: string): IRegion {
-    switch (slug) {        case "nyc1":
+    switch (slug) {
+        case "nyc1":
         case "nyc2":
         case "nyc3":
             return {

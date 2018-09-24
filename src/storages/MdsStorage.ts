@@ -5,8 +5,9 @@ const MDSCommon = require("mydataspace").MDSCommon;
 const MDSClient = require("mydataspace").MDSClient;
 
 interface IMdsStorageOptions {
-    clientId: string;
+    apiURL: string;
     accessToken: string;
+    clientId: string;
     root: string;
     path: string;
 }
@@ -20,6 +21,7 @@ export default class MdsStorage implements IStorage {
 
     public async store(provider: string, results: IBenchmarkResult[]): Promise<void> {
         const client = new MDSClient({
+            apiURL: this.options.apiURL,
             clientId: this.options.clientId,
             permission: this.options.root,
         });
@@ -93,7 +95,6 @@ export default class MdsStorage implements IStorage {
                 path: `website/servers/${result.env.id}`,
                 root: this.options.root,
             });
-
         }
     }
 }

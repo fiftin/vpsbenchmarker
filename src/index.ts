@@ -17,6 +17,7 @@ const config = require("../config.json");
 
 const storage: IStorage = new MdsStorage({
     accessToken: config.storage.accessToken,
+    apiURL: config.storage.apiURL,
     clientId: config.storage.clientId,
     path: config.storage.path,
     root: config.storage.root,
