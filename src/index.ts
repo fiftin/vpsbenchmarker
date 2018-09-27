@@ -19,6 +19,7 @@ const storage: IStorage = new MdsStorage({
     accessToken: config.storage.accessToken,
     apiURL: config.storage.apiURL,
     clientId: config.storage.clientId,
+    groupedResultsPath: config.storage.groupedResultsPath,
     path: config.storage.path,
     root: config.storage.root,
 });
@@ -91,7 +92,7 @@ const logger = console;
             username: providerInfo.servers[serverId].username,
         });
 
-        await storage.store(argv.provider, serverResults);
+        await storage.storeServerResults(serverId, serverResults);
     }
 })().then(() => {
     process.exit();

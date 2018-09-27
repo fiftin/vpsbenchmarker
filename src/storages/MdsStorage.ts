@@ -10,6 +10,7 @@ interface IMdsStorageOptions {
     clientId: string;
     root: string;
     path: string;
+    groupedResultsPath: string;
 }
 
 export default class MdsStorage implements IStorage {
@@ -19,16 +20,38 @@ export default class MdsStorage implements IStorage {
         this.options = options;
     }
 
-    public async store(provider: string, results: IBenchmarkResult[]): Promise<void> {
+    public async storeServerResults(serverId: string, results: IBenchmarkResult[]): Promise<void> {
         const client = new MDSClient({
             apiURL: this.options.apiURL,
             clientId: this.options.clientId,
             permission: this.options.root,
+            websocketURL: this.options.apiURL,
         });
+
+        if (results.length === 0) {
+            return;
+        }
 
         await client.connect();
 
         await client.loginByToken(this.options.accessToken);
+
+        await client.entities.change({
+            fields: [{name: "rating", value: results[0].serverRating}],
+            path: `website/servers/${results[0].env.id}`,
+            root: this.options.root,
+        });
+
+        const entityName = MDSCommon.dateToString(new Date());
+
+        await client.entities.create({
+            fields: [
+                {name: "serverId", value: serverId},
+                {name: "rating", value: results[0].serverRating},
+            ],
+            path: `${this.options.groupedResultsPath}/${serverId}-${entityName}`,
+            root: this.options.root,
+        });
 
         for (const result of results) {
             const benchmarkType = BenchmarkType[result.type].toLowerCase();
@@ -60,8 +83,6 @@ export default class MdsStorage implements IStorage {
                 fields.push({name, type, value});
             }
 
-            const entityName = MDSCommon.dateToString(new Date());
-
             try {
                 await client.entities.get({
                     path: `${this.options.path}/${result.benchmarkId}/${result.env.id}`,
@@ -70,7 +91,7 @@ export default class MdsStorage implements IStorage {
             } catch (e) {
                 await client.entities.create({
                     childPrototype: {
-                        path: "protos/result",
+                        path: "protos/BenchmarkResult",
                         root: this.options.root,
                     },
                     path: `${this.options.path}/${result.benchmarkId}/${result.env.id}`,
@@ -90,9 +111,40 @@ export default class MdsStorage implements IStorage {
                 root: this.options.root,
             });
 
+            const groupedResultsFields = [
+                {name: "Benchmark", value: result.benchmarkId},
+                {name: "Rating", value: result.rating},
+                {name: "BenchmarkTotalNumberOfEvents", value: result.metrics.get("totalNumberOfEvents")},
+                {name: "BenchmarkTotalTime", value: result.metrics.get("totalTime")},
+            ];
+
+            let groupedResultFieldPrefix;
+
+            switch (result.type) {
+                case BenchmarkType.Cpu:
+                    groupedResultFieldPrefix = "cpu";
+                    break;
+                case BenchmarkType.IO:
+                    groupedResultFieldPrefix = "fileio";
+                    break;
+                case BenchmarkType.Memory:
+                    groupedResultFieldPrefix = "memory";
+                    break;
+                case BenchmarkType.Network:
+                    groupedResultFieldPrefix = "network";
+                    break;
+                default:
+                    groupedResultFieldPrefix = "unknown";
+                    break;
+            }
+
+            for (const field of groupedResultsFields) {
+                field.name = groupedResultFieldPrefix + field.name;
+            }
+
             await client.entities.change({
-                fields: [{name: "rating", value: result.serverRating}],
-                path: `website/servers/${result.env.id}`,
+                fields: groupedResultsFields,
+                path: `${this.options.groupedResultsPath}/${serverId}-${entityName}`,
                 root: this.options.root,
             });
         }
