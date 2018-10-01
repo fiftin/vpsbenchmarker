@@ -14,7 +14,7 @@ export default class Benchmarker {
         } else if (benchmarkResult.benchmarkId === "sysbench-memory") {
             rating = 500 * benchmarkResult.metrics.get("totalNumberOfEvents") / 90000000;
         } else {
-            throw new Error(`Unknown benchmark ${benchmarkResult.benchmarkId}`);
+            rating = 0;
         }
         return Math.floor(rating);
     }

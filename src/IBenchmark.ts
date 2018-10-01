@@ -5,6 +5,8 @@ export enum BenchmarkType {
     IO,
     Memory,
     Network,
+    CpuInfo,
+    MemInfo,
 }
 
 export enum BenchmarkStatus {

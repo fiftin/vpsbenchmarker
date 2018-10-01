@@ -111,35 +111,49 @@ export default class MdsStorage implements IStorage {
                 root: this.options.root,
             });
 
-            const groupedResultsFields = [
-                {name: "Benchmark", value: result.benchmarkId},
-                {name: "Rating", value: result.rating},
-                {name: "BenchmarkTotalNumberOfEvents", value: result.metrics.get("totalNumberOfEvents")},
-                {name: "BenchmarkTotalTime", value: result.metrics.get("totalTime")},
-            ];
+            let groupedResultsFields;
+            if ([BenchmarkType.Cpu,
+                BenchmarkType.IO,
+                BenchmarkType.Memory,
+                BenchmarkType.Network].indexOf(result.type) >= 0) {
+                groupedResultsFields = [
+                    {name: "Benchmark", value: result.benchmarkId},
+                    {name: "Rating", value: result.rating},
+                    {name: "BenchmarkTotalNumberOfEvents", value: result.metrics.get("totalNumberOfEvents")},
+                    {name: "BenchmarkTotalTime", value: result.metrics.get("totalTime")},
+                    {name: "BenchmarkNumberOfThreads", value: result.metrics.get("numberOfThreads")},
+                ];
 
-            let groupedResultFieldPrefix;
+                let groupedResultFieldPrefix;
+                switch (result.type) {
+                    case BenchmarkType.Cpu:
+                        groupedResultFieldPrefix = "cpu";
+                        break;
+                    case BenchmarkType.IO:
+                        groupedResultFieldPrefix = "fileio";
+                        break;
+                    case BenchmarkType.Memory:
+                        groupedResultFieldPrefix = "memory";
+                        break;
+                    case BenchmarkType.Network:
+                        groupedResultFieldPrefix = "network";
+                        break;
+                    default:
+                        groupedResultFieldPrefix = "unknown";
+                        break;
+                }
 
-            switch (result.type) {
-                case BenchmarkType.Cpu:
-                    groupedResultFieldPrefix = "cpu";
-                    break;
-                case BenchmarkType.IO:
-                    groupedResultFieldPrefix = "fileio";
-                    break;
-                case BenchmarkType.Memory:
-                    groupedResultFieldPrefix = "memory";
-                    break;
-                case BenchmarkType.Network:
-                    groupedResultFieldPrefix = "network";
-                    break;
-                default:
-                    groupedResultFieldPrefix = "unknown";
-                    break;
-            }
-
-            for (const field of groupedResultsFields) {
-                field.name = groupedResultFieldPrefix + field.name;
+                for (const field of groupedResultsFields) {
+                    field.name = groupedResultFieldPrefix + field.name;
+                }
+            } else {
+                groupedResultsFields = [];
+                for (const entry of result.metrics.entries()) {
+                    groupedResultsFields.push({
+                        name: BenchmarkType[result.type] + "_" + entry[0],
+                        value: entry[1],
+                    });
+                }
             }
 
             await client.entities.change({

@@ -7,6 +7,8 @@ import {IBenchmark} from "./IBenchmark";
 import {IStorage} from "./IStorage";
 import ProviderFactory from "./ProviderFactory";
 import MdsStorage from "./storages/MdsStorage";
+import CpuInfo from "./benchmarks/CpuInfo";
+import MemInfo from "./benchmarks/MemInfo";
 
 if (!argv.provider) {
     throw new Error(`Provider does not specified. Please specify ` +
@@ -60,6 +62,18 @@ function getProviderBenchmarks(providerId: string): Map<string, IBenchmark[]> {
                         break;
                     case "memory":
                         benchmark = new SysbenchMemoryBenchmark(config.benchmarks[benchmarkId]);
+                        break;
+                    default:
+                        throw new Error(`Unsupported sysbench test "${config.benchmarks[benchmarkId].test}"`);
+                }
+                break;
+            case "info":
+                switch (config.benchmarks[benchmarkId].test) {
+                    case "cpu":
+                        benchmark = new CpuInfo();
+                        break;
+                    case "mem":
+                        benchmark = new MemInfo();
                         break;
                     default:
                         throw new Error(`Unsupported sysbench test "${config.benchmarks[benchmarkId].test}"`);
