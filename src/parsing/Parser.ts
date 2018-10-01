@@ -34,7 +34,7 @@ export default class Parser {
                         ret.set(field, parseFloat(m[template.indexInRegexp]));
                         break;
                     default:
-                        ret.set(field, template.indexInRegexp);
+                        ret.set(field, m[template.indexInRegexp]);
                         break;
                 }
             }

@@ -3,7 +3,7 @@ import Parser, {FieldType} from "./Parser";
 export default class Parsers {
     public static memInfo = new Parser(new Map([
         ["memTotal",    { type: FieldType.Int, regexp: /^MemTotal:\s*(.*) kB$/, indexInRegexp: 1 }],
-        ["memFree",     { type: FieldType.Int, regexp: /^MemFree\s+:\s*(.*) kB$/, indexInRegexp: 1 }],
+        ["memFree",     { type: FieldType.Int, regexp: /^MemFree:\s*(.*) kB$/, indexInRegexp: 1 }],
     ]));
 
     public static cpuInfo = new Parser(new Map([
