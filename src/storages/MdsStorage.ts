@@ -111,6 +111,10 @@ export default class MdsStorage implements IStorage {
                 root: this.options.root,
             });
 
+            const serverFields = {
+
+            };
+
             let groupedResultsFields;
             if ([BenchmarkType.Cpu,
                 BenchmarkType.IO,
@@ -146,6 +150,8 @@ export default class MdsStorage implements IStorage {
                 for (const field of groupedResultsFields) {
                     field.name = groupedResultFieldPrefix + field.name;
                 }
+
+                serverFields[groupedResultFieldPrefix + "Rating"] = result.rating;
             } else {
                 groupedResultsFields = [];
                 for (const entry of result.metrics.entries()) {
@@ -159,6 +165,12 @@ export default class MdsStorage implements IStorage {
             await client.entities.change({
                 fields: groupedResultsFields,
                 path: `${this.options.groupedResultsPath}/${serverId}-${entityName}`,
+                root: this.options.root,
+            });
+
+            await client.entities.change({
+                fields: MDSCommon.convertMapToNameValue(serverFields),
+                path: `website/servers/${serverId}`,
                 root: this.options.root,
             });
         }

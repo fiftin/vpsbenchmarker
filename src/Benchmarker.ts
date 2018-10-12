@@ -7,12 +7,16 @@ const logger = console;
 export default class Benchmarker {
     public static calcRating(benchmarkResult: IBenchmarkResult): number {
         let rating: number;
+        const totalMinutes = benchmarkResult.metrics.get("totalTime") / 60.0;
+        const totalNumberOfEvents = benchmarkResult.metrics.get("totalNumberOfEvents");
+        const eventsPerMinute = totalNumberOfEvents / totalMinutes;
+
         if (benchmarkResult.benchmarkId.startsWith("sysbench-cpu-")) {
-            rating = 500 * benchmarkResult.metrics.get("totalNumberOfEvents") / 40000;
+            rating = 500 * eventsPerMinute / 40000;
         } else if (benchmarkResult.benchmarkId.startsWith("sysbench-fileio-")) {
-            rating = 500 * benchmarkResult.metrics.get("totalNumberOfEvents") / 400000;
+            rating = 500 * eventsPerMinute / 400000;
         } else if (benchmarkResult.benchmarkId === "sysbench-memory") {
-            rating = 500 * benchmarkResult.metrics.get("totalNumberOfEvents") / 90000000;
+            rating = 500 * eventsPerMinute / 90000000;
         } else {
             rating = 0;
         }
