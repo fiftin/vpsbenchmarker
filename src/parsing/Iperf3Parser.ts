@@ -5,7 +5,7 @@ export default class Iperf3Parser {
 
         const items = str.split("\n").map((line) => {
             // [SUM]   7.00-8.00   sec  11.6 MBytes  97.0 Mbits/sec
-            const m = line.match(/^\[SUM]\s+[\d.-]+\s+sec\s+(?:[\d.]+) (?:\w+)\s+([\d.]+) (\w+)\/sec/);
+            const m = line.match(/^\[SUM]\s+[^0][\d.-]+\s+sec\s+(?:[\d.]+) (?:\w+)\s+([\d.]+) (\w+)\/sec/);
             if (!m) {
                 return;
             }
