@@ -93,24 +93,9 @@ const logger = console;
 (async () => {
     const providerInfo = config.providers[argv.provider];
     const provider = new ProviderFactory().createProvider(argv.provider, providerInfo.settings);
-    const providerBenchmarks = getProviderBenchmarks(argv.provider)[Symbol.iterator]();
-    await Promise.all([...providerBenchmarks].map(async ([serverId, serverBenchmarks]) => {
-        const benchmarker = new Benchmarker(provider, serverBenchmarks);
-        const serverResults = await benchmarker.start({
-            id: serverId,
-            image: providerInfo.servers[serverId].image,
-            location: providerInfo.servers[serverId].location,
-            name: providerInfo.servers[serverId].name,
-            privateKey: providerInfo.settings.privateKey,
-            type: providerInfo.servers[serverId].type,
-            username: providerInfo.servers[serverId].username,
-        });
 
-        await storage.storeServerResults(serverId, serverResults);
-    }));
-
-    // for (const [serverId, serverBenchmarks] of getProviderBenchmarks(argv.provider)) {
-
+    // const providerBenchmarks = getProviderBenchmarks(argv.provider)[Symbol.iterator]();
+    // await Promise.all([...providerBenchmarks].map(async ([serverId, serverBenchmarks]) => {
     //     const benchmarker = new Benchmarker(provider, serverBenchmarks);
     //     const serverResults = await benchmarker.start({
     //         id: serverId,
@@ -121,9 +106,23 @@ const logger = console;
     //         type: providerInfo.servers[serverId].type,
     //         username: providerInfo.servers[serverId].username,
     //     });
-
     //     await storage.storeServerResults(serverId, serverResults);
-    // }
+    // }));
+
+    for (const [serverId, serverBenchmarks] of getProviderBenchmarks(argv.provider)) {
+        const benchmarker = new Benchmarker(provider, serverBenchmarks);
+        const serverResults = await benchmarker.start({
+            id: serverId,
+            image: providerInfo.servers[serverId].image,
+            location: providerInfo.servers[serverId].location,
+            name: providerInfo.servers[serverId].name,
+            privateKey: providerInfo.settings.privateKey,
+            type: providerInfo.servers[serverId].type,
+            username: providerInfo.servers[serverId].username,
+        });
+        await storage.storeServerResults(serverId, serverResults);
+    }
+
 })().then(() => {
     process.exit();
 }, (err) => {
