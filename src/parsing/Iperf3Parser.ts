@@ -10,23 +10,32 @@ export default class Iperf3Parser {
                 return;
             }
 
-            const bandwidth = parseFloat(m[1]);
+            const value = parseFloat(m[1]);
+
+            let bandwidth;
 
             switch (m[2]) {
                 case "Kbits":
-                    return bandwidth * 1000;
+                    bandwidth = value * 1000;
+                    break;
                 case "Mbits":
-                    return bandwidth * 1000000;
+                    bandwidth = value * 1000000;
+                    break;
                 case "Gbits":
-                    return bandwidth * 1000000000;
+                    bandwidth = value * 1000000000;
+                    break;
+                default:
+                    bandwidth = value;
             }
 
-            return bandwidth;
+            return {
+                bandwidth,
+            };
         }).filter((item) => item != null);
 
         ret.set("items", items);
 
-        ret.set("networkBandwidth", items.reduce((sum, value) => sum + value, 0) / items.length);
+        ret.set("networkBandwidth", items.reduce((sum, value) => sum + value.bandwidth, 0) / items.length);
 
         return ret;
     }

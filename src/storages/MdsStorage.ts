@@ -108,17 +108,38 @@ export default class MdsStorage implements IStorage {
                 root: this.options.root,
             });
 
+            for (const [name, value] of result.metrics) {
+                if (typeof value !== "object") {
+                    continue;
+                }
+
+                await client.entities.create({
+                    fields: Array.isArray(value) ? [] : MDSCommon.convertMapToNameValue(value, true),
+                    path: `${this.options.path}/${result.benchmarkId}/${result.env.id}/${entityName}/${name}`,
+                    root: this.options.root,
+                });
+
+                if (Array.isArray(value)) {
+                    const entities = value.map((item, i) => ({
+                        fields: MDSCommon.convertMapToNameValue(item, true),
+                        path: `${this.options.path}/${result.benchmarkId}/${result.env.id}/${entityName}/${name}/${i}`,
+                        root: this.options.root,
+                    }));
+
+                    await client.entities.create(entities);
+                }
+            }
+
             await client.entities.change({
                 fields,
                 path: `${this.options.path}/${result.benchmarkId}/${result.env.id}`,
                 root: this.options.root,
             });
 
-            const serverFields = {
+            const serverFields = {};
 
-            };
+            let groupedResultsFields = [];
 
-            let groupedResultsFields;
             if ([BenchmarkType.Cpu,
                 BenchmarkType.IO,
                 BenchmarkType.Memory].indexOf(result.type) >= 0) {
@@ -152,15 +173,23 @@ export default class MdsStorage implements IStorage {
 
                 serverFields[groupedResultFieldPrefix + "Rating"] = result.rating;
             } else if (result.type === BenchmarkType.Network) {
-                // TODO: Store network rating
+                groupedResultsFields.push(...[
+                    {name: "networkBenchmark", value: result.benchmarkId},
+                    {name: "networkRating", value: result.rating},
+                    {name: "networkBandwidth", value: result.metrics.get("networkBandwidth")},
+                ]);
                 serverFields["networkRating"] = result.rating;
+                serverFields["networkBandwidth"] = result.metrics.get("networkBandwidth");
             } else {
-                groupedResultsFields = [];
                 for (const entry of result.metrics.entries()) {
                     groupedResultsFields.push({
                         name: BenchmarkType[result.type] + "_" + entry[0],
                         value: entry[1],
                     });
+                }
+                if (result.type === BenchmarkType.CpuInfo) {
+                    serverFields["CpuInfo_modelName"] = result.metrics.get("modelName");
+                    serverFields["CpuInfocpuMhz"] = result.metrics.get("cpuMhz");
                 }
             }
 

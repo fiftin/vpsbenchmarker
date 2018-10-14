@@ -1,5 +1,8 @@
 import {argv} from "yargs";
 import Benchmarker from "./Benchmarker";
+import CpuInfo from "./benchmarks/CpuInfo";
+import Iperf3Benchmark from "./benchmarks/Iperf3Benchmark";
+import MemInfo from "./benchmarks/MemInfo";
 import SysbenchCpuBenchmark from "./benchmarks/SysbenchCpuBenchmark";
 import SysbenchIOBenchmark from "./benchmarks/SysbenchIOBenchmark";
 import SysbenchMemoryBenchmark from "./benchmarks/SysbenchMemoryBenchmark";
@@ -7,8 +10,6 @@ import {IBenchmark} from "./IBenchmark";
 import {IStorage} from "./IStorage";
 import ProviderFactory from "./ProviderFactory";
 import MdsStorage from "./storages/MdsStorage";
-import CpuInfo from "./benchmarks/CpuInfo";
-import MemInfo from "./benchmarks/MemInfo";
 
 if (!argv.provider) {
     throw new Error(`Provider does not specified. Please specify ` +
@@ -74,6 +75,15 @@ function getProviderBenchmarks(providerId: string): Map<string, IBenchmark[]> {
                         break;
                     case "mem":
                         benchmark = new MemInfo();
+                        break;
+                    default:
+                        throw new Error(`Unsupported sysbench test "${config.benchmarks[benchmarkId].test}"`);
+                }
+                break;
+            case "iperf3":
+                switch (config.benchmarks[benchmarkId].test) {
+                    case "network":
+                        benchmark = new Iperf3Benchmark(config.benchmarks[benchmarkId]);
                         break;
                     default:
                         throw new Error(`Unsupported sysbench test "${config.benchmarks[benchmarkId].test}"`);
