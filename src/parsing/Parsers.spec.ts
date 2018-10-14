@@ -5,7 +5,7 @@ describe("Parsers", () => {
     describe("networkIperf3", () => {
         it("Should parse single line", () => {
             const res = Parsers.networkIperf3.parse("[SUM]  11.00-12.00  sec  12.1 MBytes   102 Mbits/sec    8");
-            expect(res.get("bandwidth")).to.eq(102000000);
+            expect(res.get("networkBandwidth")).to.eq(102000000);
             expect(res.get("items").length).to.eq(1);
         });
 
@@ -23,7 +23,7 @@ describe("Parsers", () => {
                 "[SUM]   9.00-10.00  sec  11.3 MBytes  95.1 Mbits/sec    6\n" +
                 "[SUM]  10.00-11.00  sec  11.9 MBytes  99.7 Mbits/sec    6\n" +
                 "[SUM]  11.00-12.00  sec  12.1 MBytes   102 Mbits/sec    8\n");
-            expect(res.get("bandwidth")).to.eq(101558333.33333333);
+            expect(res.get("networkBandwidth")).to.eq(101558333);
             expect(res.get("items").length).to.eq(12);
         });
     });

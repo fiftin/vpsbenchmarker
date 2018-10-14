@@ -19,7 +19,6 @@ export default class MdsStorage implements IStorage {
     constructor(options: IMdsStorageOptions) {
         this.options = options;
     }
-
     public async storeServerResults(serverId: string, results: IBenchmarkResult[]): Promise<void> {
         const client = new MDSClient({
             apiURL: this.options.apiURL,
@@ -188,7 +187,7 @@ export default class MdsStorage implements IStorage {
                     });
                 }
                 if (result.type === BenchmarkType.CpuInfo) {
-                    serverFields["CpuInfo_modelName"] = result.metrics.get("modelName");
+                    serverFields["CpuInfo_modelName"] = this.humanizeCpuModelName(result.metrics.get("modelName"));
                     serverFields["CpuInfocpuMhz"] = result.metrics.get("cpuMhz");
                 }
             }
@@ -205,5 +204,16 @@ export default class MdsStorage implements IStorage {
                 root: this.options.root,
             });
         }
+    }
+
+    private humanizeCpuModelName(cpuModelName) {
+        if (!cpuModelName) {
+            return;
+        }
+        cpuModelName = cpuModelName.replace(/\(R\)/g, "");
+        cpuModelName = cpuModelName.replace(/\ CPU/g, "");
+        cpuModelName = cpuModelName.replace(/\ Processor/g, "");
+        cpuModelName = cpuModelName.replace(/\Intel /g, "");
+        return cpuModelName;
     }
 }
