@@ -24,7 +24,7 @@ export default class Benchmarker {
             }
         } else if (benchmarkResult.benchmarkId.startsWith("iperf3-")) {
             const bandwidth = benchmarkResult.metrics.get("networkBandwidth");
-            rating = 500.0 * bandwidth / 20000000000.0;
+            rating = 500.0 * bandwidth / 3000000000.0;
         } else {
             rating = 0;
         }
