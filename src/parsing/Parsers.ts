@@ -1,10 +1,8 @@
+import Iperf3Parser from "./Iperf3Parser";
 import Parser, {FieldType} from "./Parser";
 
 export default class Parsers {
-    public static networkIperf3 = new Parser(new Map([
-        ["memTotal",    { type: FieldType.Int, regexp: /^MemTotal:\s*(.*) kB$/, indexInRegexp: 1 }],
-        ["memFree",     { type: FieldType.Int, regexp: /^MemFree:\s*(.*) kB$/, indexInRegexp: 1 }],
-    ]));
+    public static networkIperf3 = new Iperf3Parser();
 
     public static memInfo = new Parser(new Map([
         ["memTotal",    { type: FieldType.Int, regexp: /^MemTotal:\s*(.*) kB$/, indexInRegexp: 1 }],
