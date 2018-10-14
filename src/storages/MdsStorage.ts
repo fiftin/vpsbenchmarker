@@ -118,8 +118,7 @@ export default class MdsStorage implements IStorage {
             let groupedResultsFields;
             if ([BenchmarkType.Cpu,
                 BenchmarkType.IO,
-                BenchmarkType.Memory,
-                BenchmarkType.Network].indexOf(result.type) >= 0) {
+                BenchmarkType.Memory].indexOf(result.type) >= 0) {
                 groupedResultsFields = [
                     {name: "Benchmark", value: result.benchmarkId},
                     {name: "Rating", value: result.rating},
@@ -139,9 +138,6 @@ export default class MdsStorage implements IStorage {
                     case BenchmarkType.Memory:
                         groupedResultFieldPrefix = "memory";
                         break;
-                    case BenchmarkType.Network:
-                        groupedResultFieldPrefix = "network";
-                        break;
                     default:
                         groupedResultFieldPrefix = "unknown";
                         break;
@@ -152,6 +148,8 @@ export default class MdsStorage implements IStorage {
                 }
 
                 serverFields[groupedResultFieldPrefix + "Rating"] = result.rating;
+            } else if (result.type === BenchmarkType.Network) {
+                // TODO: Store network rating
             } else {
                 groupedResultsFields = [];
                 for (const entry of result.metrics.entries()) {

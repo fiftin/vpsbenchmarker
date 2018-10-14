@@ -31,7 +31,7 @@ export default class Benchmarker {
         let cpuRating = 0;
         let memoryRating = 0;
         let fileioRating = 0;
-        const networkRating = 500;
+        let networkRating = 0;
         const oltpRating = 1000;
 
         for (const benchmarkResult of results) {
@@ -46,6 +46,10 @@ export default class Benchmarker {
             } else if (benchmarkResult.benchmarkId === "sysbench-memory") {
                 if (!memoryRating) {
                     memoryRating = benchmarkResult.rating;
+                }
+            } else if (benchmarkResult.benchmarkId.startsWith("iperf3-")) {
+                if (!networkRating) {
+                    networkRating = benchmarkResult.rating;
                 }
             }
         }
