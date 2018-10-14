@@ -7,19 +7,28 @@ const logger = console;
 export default class Benchmarker {
     public static calcRating(benchmarkResult: IBenchmarkResult): number {
         let rating: number;
-        const totalMinutes = benchmarkResult.metrics.get("totalTime") / 60.0;
-        const totalNumberOfEvents = benchmarkResult.metrics.get("totalNumberOfEvents");
-        const eventsPerMinute = totalNumberOfEvents / totalMinutes;
 
-        if (benchmarkResult.benchmarkId.startsWith("sysbench-cpu-")) {
-            rating = 500 * eventsPerMinute / 40000;
-        } else if (benchmarkResult.benchmarkId.startsWith("sysbench-fileio-")) {
-            rating = 500 * eventsPerMinute / 400000;
-        } else if (benchmarkResult.benchmarkId === "sysbench-memory") {
-            rating = 500 * eventsPerMinute / 90000000;
+        if (benchmarkResult.benchmarkId.startsWith("sysbench-")) {
+            const totalMinutes = benchmarkResult.metrics.get("totalTime") / 60.0;
+            const totalNumberOfEvents = benchmarkResult.metrics.get("totalNumberOfEvents");
+            const eventsPerMinute = totalNumberOfEvents / totalMinutes;
+
+            if (benchmarkResult.benchmarkId.startsWith("sysbench-cpu-")) {
+                rating = 500 * eventsPerMinute / 40000;
+            } else if (benchmarkResult.benchmarkId.startsWith("sysbench-fileio-")) {
+                rating = 500 * eventsPerMinute / 400000;
+            } else if (benchmarkResult.benchmarkId === "sysbench-memory") {
+                rating = 500 * eventsPerMinute / 90000000;
+            } else {
+                rating = 0;
+            }
+        } else if (benchmarkResult.benchmarkId.startsWith("iperf3-")) {
+            const bandwidth = benchmarkResult.metrics.get("networkBandwidth");
+            rating = 500.0 * bandwidth / 20000000000.0;
         } else {
             rating = 0;
         }
+
         return Math.floor(rating);
     }
 

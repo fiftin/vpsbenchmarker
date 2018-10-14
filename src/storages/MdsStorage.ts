@@ -79,6 +79,9 @@ export default class MdsStorage implements IStorage {
             ];
 
             for (const [name, value] of result.metrics) {
+                if (typeof value === "object") {
+                    continue;
+                }
                 const type = typeof value === "string" ? "s" : "r";
                 fields.push({name, type, value});
             }
@@ -150,6 +153,7 @@ export default class MdsStorage implements IStorage {
                 serverFields[groupedResultFieldPrefix + "Rating"] = result.rating;
             } else if (result.type === BenchmarkType.Network) {
                 // TODO: Store network rating
+                serverFields["networkRating"] = result.rating;
             } else {
                 groupedResultsFields = [];
                 for (const entry of result.metrics.entries()) {

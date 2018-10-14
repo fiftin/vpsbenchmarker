@@ -26,7 +26,7 @@ export default class Iperf3Parser {
 
         ret.set("items", items);
 
-        ret.set("bandwidth", items.reduce((sum, value) => sum + value, 0) / items.length);
+        ret.set("networkBandwidth", items.reduce((sum, value) => sum + value, 0) / items.length);
 
         return ret;
     }
