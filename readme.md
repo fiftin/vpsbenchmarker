@@ -67,6 +67,48 @@ Each benchmark has unique name (`sysbench-cpu-1core`). It uses to link from othe
 * `cpuinfo` &mdash; getting info about CPU from `/proc/cpuinfo`.
 * `meminfo` &mdash; getting info about memory from `/proc/meminfo`.
 
+#### ```storage```
+
+Where you can store results of benchmarking. Now supported only mydataspace.net / web20.site storage.
+
+Example:
+```json
+"storage": {
+  "type": "MdsStorage",
+  "clientId": "***",
+  "accessToken": "***",
+  "root": "cloudbench",
+  "path": "results",
+  "groupedResultsPath": "grouped-results"
+}
+```
+
+#### ```providers```
+
+Contains configurations for access to cloud providers API.
+
+Example:
+```json
+"providers": {
+  "digitalocean": {
+    "name": "DigitalOcean",
+    "settings": {
+      "apiToken": "***",
+      "sshKey": "234234",
+      "privateKey": "C:\\Users\\john\\.ssh\\id_rsa"
+    },
+    "servers": {
+      "digitalocean-512mb-nyc1": {
+        "name": "512mb-nyc1",
+        "type": "512mb",
+        "image": "ubuntu-16-04-x64",
+        "location": "nyc3"
+      },
+    }
+  } 
+}
+```
+
 ### Where I can see results?
 
 We use this tool on [cloudbench.io](https://cloudbench.io). We collect cloud plan specifications, thoroughly test their performance and provide screening and comparison tools to make cloud search easy and fun.
