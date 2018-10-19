@@ -19,7 +19,7 @@ Tool for benchmarking VPS servers with using API of cloud providers.
 
 ### Supported benchmarking tools
 * [sysbench](https://github.com/akopytov/sysbench) &mdash; Scriptable database and system performance benchmark.
-* iperf3 &mdash; Tool for test of network bandwidth.
+* iperf3 &mdash; Tool for testing of network bandwidth.
 
 ### How to use
 
