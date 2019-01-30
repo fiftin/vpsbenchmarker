@@ -18,7 +18,6 @@ describe("Benchmarker", () => {
                 testId: "",
                 type: BenchmarkType.Network,
             });
-
             expect(res).to.eq(1666);
         });
     });
