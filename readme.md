@@ -109,7 +109,6 @@ Example:
 }
 ```
 
-
 ### Where I can see results?
 
 We use this tool on [cloudbench.io](https://cloudbench.io). We collect cloud plan specifications, thoroughly test their performance and provide screening and comparison tools to make cloud search easy and fun.
