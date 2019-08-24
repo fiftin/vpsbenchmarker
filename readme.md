@@ -8,7 +8,7 @@ Tool for benchmarking VPS servers with using API of cloud providers.
 * It creates virtual server with using cloud service API.
 * It connects to server over SSH and runs benchmarks.
 * It terminates server with using cloud service API.
-* It stores results to [mydataspace.org](https://mydataspace.org) / [web20.site](https://web20.site). Can be customized by you.
+* It stores results to [fastlix.com](https://fastlix.com). Can be customized by you.
 
 ### Supported services
 * [Hetzner](https://hetzner.cloud)
